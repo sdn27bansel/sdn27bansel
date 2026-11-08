@@ -2,132 +2,456 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Website Resmi SDN 27 BANAWA SELATAN</title>
+    <!-- PWA Manifest Data URI -->
+    <link rel="manifest" href='data:application/manifest+json,{"name":"Website Resmi SDN 27 BANAWA SELATAN","short_name":"SDN 27 BANAWA SELATAN","start_url":".","display":"standalone","background_color":"#f4f7fc","theme_color":"#800000","icons":[{"src":"https://i.ibb.co.com/5xhN0cm1/Logo-Donggala.png","sizes":"192x192","type":"image/png"}]}'>
+    <meta name="theme-color" content="#800000">
+    <!-- Bootstrap 5.3 & FontAwesome 6.4 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+
     <style>
-        body { padding-bottom: 70px; background-color: #f8f9fa; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        
-        .hero-section { background-color: #800000; color: white; padding: 120px 0; position: relative; overflow: hidden; }
+        :root {
+            --maroon: #800000;
+            --red-sd: #dc3545;
+            --gold: #ffc107;
+            --glass-bg: rgba(255, 255, 255, 0.88);
+            --glass-border: rgba(255, 255, 255, 0.98);
+            --shadow-3d: 0 14px 28px rgba(128, 0, 0, 0.08), 0 6px 0 #dce3ec, inset 0 2px 3px rgba(255, 255, 255, 0.95);
+            --shadow-3d-hover: 0 22px 38px rgba(220, 53, 69, 0.16), 0 8px 0 #cbd5e1, inset 0 2px 4px rgba(255, 255, 255, 1);
+        }
+
+        /* Full-Page Wrapper untuk menutup elemen bawaan Blogger */
+        #app-3d-shell {
+            position: fixed;
+            inset: 0;
+            z-index: 999999;
+            background: radial-gradient(circle at 20% 10%, #ffffff 0%, #f1f5f9 65%, #e2e8f0 100%);
+            font-family: 'Plus Jakarta Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-y: auto;
+            overflow-x: hidden;
+            perspective: 1200px;
+            scroll-behavior: smooth;
+            padding-bottom: 80px;
+        }
+        @media (min-width: 768px) {
+            #app-3d-shell { padding-bottom: 0; }
+        }
+
+        /* Navbar Desktop (Versi Awal dengan Sentuhan 3D Glassmorphism) */
+        .navbar-top-3d {
+            background: rgba(255, 255, 255, 0.92) !important;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 2px solid #ffffff;
+            box-shadow: 0 6px 0 #e2e8f0, 0 10px 25px rgba(0, 0, 0, 0.07);
+            z-index: 1030;
+        }
+        .navbar-top-3d .nav-link {
+            font-weight: 700;
+            color: #475569;
+            padding: 8px 14px !important;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+            margin: 0 2px;
+        }
+        .navbar-top-3d .nav-link:hover {
+            background: rgba(220, 53, 69, 0.08);
+            color: var(--red-sd);
+            transform: translateY(-2px);
+        }
+        .navbar-top-3d .nav-link.spmb-highlight {
+            background: linear-gradient(180deg, #facc15 0%, #eab308 100%);
+            color: #1e293b !important;
+            box-shadow: 0 4px 0 #a16207, 0 6px 12px rgba(234, 179, 8, 0.3);
+        }
+        .navbar-top-3d .nav-link.spmb-highlight:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 0 #a16207, 0 10px 16px rgba(234, 179, 8, 0.4);
+        }
+
+        /* Bottom Navigation Mobile (Versi Awal dengan Kedalaman 3D) */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(15px);
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.12);
+            z-index: 1040;
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0 10px 0;
+            border-top: 2px solid #ffffff;
+        }
+        .bottom-nav a {
+            text-align: center;
+            color: #64748b;
+            text-decoration: none;
+            font-size: 0.7rem;
+            font-weight: 700;
+            flex-grow: 1;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .bottom-nav a i {
+            display: inline-flex;
+            width: 34px;
+            height: 34px;
+            align-items: center;
+            justify-content: center;
+            border-radius: 11px;
+            font-size: 1.1rem;
+            margin-bottom: 2px;
+            background: #f1f5f9;
+            box-shadow: 0 3px 0 #cbd5e1;
+            transition: all 0.2s;
+        }
+        .bottom-nav a.active, .bottom-nav a:hover { color: var(--red-sd); }
+        .bottom-nav a.active i, .bottom-nav a:hover i {
+            background: linear-gradient(135deg, #dc3545, #800000);
+            color: #ffffff;
+            box-shadow: 0 4px 0 #5a0000, 0 6px 12px rgba(220, 53, 69, 0.3);
+            transform: translateY(-3px);
+        }
+        @media (min-width: 768px) {
+            .bottom-nav { display: none; }
+        }
+
+        /* Hero Section 3D */
+        .hero-section {
+            background-color: #800000;
+            color: white;
+            padding: 115px 0;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 0 #5a0000, 0 20px 40px rgba(128, 0, 0, 0.25);
+            border-bottom: 3px solid rgba(255,255,255,0.4);
+        }
         .hero-slider { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
         .hero-slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center; }
-        /* Kode overlay hero-section::before telah dihapus di sini */
-        .hero-content { position: relative; z-index: 2; }
-        
-        .section-title { position: relative; padding-bottom: 15px; margin-bottom: 40px; font-weight: bold; text-align: center;}
-        .section-title::after { content: ""; position: absolute; left: 50%; bottom: 0; transform: translateX(-50%); width: 60px; height: 4px; background-color: #dc3545; border-radius: 2px; }
-        .section-title.text-white::after { background-color: #ffc107; }
+        .hero-section::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(128,0,0,0.65));
+            z-index: 1;
+            pointer-events: none;
+        }
+        .hero-content { position: relative; z-index: 2; transform: translateZ(30px); }
+        .hero-content h1 {
+            text-shadow: 0 5px 0 rgba(0,0,0,0.45), 0 10px 25px rgba(0,0,0,0.8);
+            letter-spacing: -0.5px;
+        }
+        .hero-content p { text-shadow: 0 2px 8px rgba(0,0,0,0.9); }
 
-        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background-color: #ffffff; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); z-index: 1030; display: flex; justify-content: space-around; padding: 10px 0; }
-        .bottom-nav a { text-align: center; color: #6c757d; text-decoration: none; font-size: 0.75rem; flex-grow: 1; cursor: pointer;}
-        .bottom-nav a i { display: block; font-size: 1.2rem; margin-bottom: 2px; }
-        .bottom-nav a.active, .bottom-nav a:hover { color: #dc3545; }
-        @media (min-width: 768px) { .bottom-nav { display: none; } body { padding-bottom: 0; } }
+        /* Section Title 3D */
+        .section-title {
+            position: relative;
+            padding-bottom: 15px;
+            margin-bottom: 35px;
+            font-weight: 800;
+            text-align: center;
+            color: #1e293b;
+            text-shadow: 0 2px 0 #ffffff;
+        }
+        .section-title::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 6px;
+            background: linear-gradient(90deg, #dc3545, #800000);
+            border-radius: 10px;
+            box-shadow: 0 3px 6px rgba(220, 53, 69, 0.35);
+        }
+        .section-title.text-white { text-shadow: 0 4px 0 rgba(0,0,0,0.4); }
+        .section-title.text-white::after { background: #ffc107; box-shadow: 0 3px 8px rgba(255, 193, 7, 0.5); }
 
-        .admin-panel { display: none; }
-        .is-admin .admin-panel { display: block !important; }
-        .is-admin .login-btn { display: none !important; } 
-        
+        /* 3D Card & Tactile Buttons */
+        .card-3d {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 2px solid var(--glass-border);
+            border-radius: 22px;
+            box-shadow: var(--shadow-3d);
+            transform-style: preserve-3d;
+            transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.3s ease;
+        }
+        .card-3d:hover {
+            transform: translateY(-7px) rotateX(2deg) rotateY(-1.5deg);
+            box-shadow: var(--shadow-3d-hover);
+        }
+
+        .btn-3d {
+            border-radius: 14px;
+            font-weight: 700;
+            border: none;
+            transition: all 0.15s ease;
+        }
+        .btn-3d-danger {
+            background: linear-gradient(180deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            box-shadow: 0 5px 0 #991b1b, 0 8px 16px rgba(220, 38, 38, 0.3);
+        }
+        .btn-3d-danger:hover {
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 7px 0 #991b1b, 0 12px 20px rgba(220, 38, 38, 0.4);
+        }
+        .btn-3d-danger:active { transform: translateY(4px); box-shadow: 0 1px 0 #991b1b; }
+
+        .btn-3d-warning {
+            background: linear-gradient(180deg, #facc15 0%, #eab308 100%);
+            color: #1e293b;
+            box-shadow: 0 6px 0 #a16207, 0 10px 20px rgba(234, 179, 8, 0.4);
+        }
+        .btn-3d-warning:hover {
+            color: #1e293b;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 0 #a16207, 0 14px 24px rgba(234, 179, 8, 0.5);
+        }
+
+        .btn-3d-success {
+            background: linear-gradient(180deg, #22c55e 0%, #16a34a 100%);
+            color: white;
+            box-shadow: 0 5px 0 #14532d, 0 8px 16px rgba(22, 163, 74, 0.3);
+        }
+        .btn-3d-success:hover { color: white; transform: translateY(-2px); }
+
+        /* Custom Slider 3D */
         .slider-container-wrapper { position: relative; width: 100%; display: flex; align-items: center; padding: 0 15px; }
-        .custom-slider { display: flex; overflow-x: auto; scroll-behavior: smooth; gap: 1.5rem; padding: 1rem 0; width: 100%; scrollbar-width: none; -ms-overflow-style: none; }
-        .custom-slider::-webkit-scrollbar { display: none; } 
-        
-        .slider-btn { position: absolute; top: 50%; transform: translateY(-50%); width: 45px; height: 45px; background: rgba(255, 255, 255, 0.7); color: #800000; border: none; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; box-shadow: 0 4px 15px rgba(0,0,0,0.15); transition: all 0.3s ease; backdrop-filter: blur(5px); }
-        .slider-btn:hover { background: #dc3545; color: white; }
-        .slider-btn.prev { left: -10px; }
-        .slider-btn.next { right: -10px; }
-        
+        .custom-slider { display: flex; overflow-x: auto; scroll-behavior: smooth; gap: 1.5rem; padding: 1.2rem 0.4rem 1.8rem 0.4rem; width: 100%; scrollbar-width: none; }
+        .custom-slider::-webkit-scrollbar { display: none; }
+        .slider-btn {
+            position: absolute;
+            top: 48%;
+            transform: translateY(-50%);
+            width: 45px;
+            height: 45px;
+            background: #ffffff;
+            color: #800000;
+            border: 2px solid #f1f5f9;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            box-shadow: 0 5px 0 #cbd5e1, 0 8px 18px rgba(0,0,0,0.18);
+            transition: all 0.2s ease;
+        }
+        .slider-btn:hover { background: #dc3545; color: white; box-shadow: 0 5px 0 #800000; }
+        .slider-btn.prev { left: -5px; }
+        .slider-btn.next { right: -5px; }
+
         .slide-item { flex: 0 0 auto; }
         .slide-item.news { width: 320px; }
-        .slide-item.app { width: 100px; text-align: center; white-space: normal; }
+        .slide-item.app { width: 115px; text-align: center; white-space: normal; }
         .slide-item.galeri { width: 280px; }
 
-        .news-card { transition: transform 0.2s; border: none; border-radius: 1rem; overflow: hidden; cursor: pointer; }
-        .news-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important; }
         .news-content-preview { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 
-        .app-icon-wrapper { transition: all 0.3s; }
-        .app-icon-wrapper:hover { transform: scale(1.1); }
+        /* 3D App Icon Cube */
+        .app-icon-wrapper {
+            width: 74px;
+            height: 74px;
+            border-radius: 22px;
+            background: linear-gradient(145deg, #ffffff, #f1f5f9);
+            border: 2px solid #ffffff;
+            box-shadow: 0 8px 0 #cbd5e1, 0 14px 24px rgba(0,0,0,0.12), inset 0 2px 4px rgba(255,255,255,1);
+            transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .slide-item.app:hover .app-icon-wrapper {
+            transform: translateY(-8px) rotateZ(-4deg) scale(1.08);
+            box-shadow: 0 12px 0 #94a3b8, 0 20px 30px rgba(220, 53, 69, 0.25);
+        }
 
-        .glass-card { background: rgba(255, 255, 255, 0.15) !important; backdrop-filter: blur(12px) !important; -webkit-backdrop-filter: blur(12px) !important; border: 1px solid rgba(255, 255, 255, 0.3) !important; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25) !important; }
+        /* 3D Statistik Cards */
+        .stat-card {
+            color: white;
+            border-radius: 20px;
+            padding: 1.3rem 0.6rem;
+            text-align: center;
+            border: 2px solid rgba(255,255,255,0.45);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .stat-card:hover { transform: translateY(-8px) scale(1.03); }
+        .stat-card i { font-size: 1.9rem; margin-bottom: 0.5rem; opacity: 0.9; }
+        .stat-card h3 { font-weight: 800; margin-bottom: 0.2rem; font-size: 1.55rem; }
+        .stat-card small { font-size: 0.8rem; font-weight: 600; }
+
+        .stat-color-0 { background: linear-gradient(145deg, #dc3545, #800000); box-shadow: 0 8px 0 #4d0000, 0 14px 24px rgba(128,0,0,0.25); }
+        .stat-color-1 { background: linear-gradient(145deg, #198754, #0f5132); box-shadow: 0 8px 0 #0a3622, 0 14px 24px rgba(25,135,84,0.25); }
+        .stat-color-2 { background: linear-gradient(145deg, #0d6efd, #0a58ca); box-shadow: 0 8px 0 #084298, 0 14px 24px rgba(13,110,253,0.25); }
+        .stat-color-3 { background: linear-gradient(145deg, #ffc107, #e0a800); color: #212529 !important; box-shadow: 0 8px 0 #997404, 0 14px 24px rgba(255,193,7,0.25); }
+        .stat-color-4 { background: linear-gradient(145deg, #0dcaf0, #0aa2c0); color: #212529 !important; box-shadow: 0 8px 0 #055160, 0 14px 24px rgba(13,202,240,0.25); }
+        .stat-color-5 { background: linear-gradient(145deg, #6f42c1, #432874); box-shadow: 0 8px 0 #2c1a4d, 0 14px 24px rgba(111,66,193,0.25); }
+        .stat-color-6 { background: linear-gradient(145deg, #fd7e14, #ca6510); box-shadow: 0 8px 0 #984c0c, 0 14px 24px rgba(253,126,20,0.25); }
+        .stat-color-7 { background: linear-gradient(145deg, #212529, #000000); box-shadow: 0 8px 0 #343a40, 0 14px 24px rgba(0,0,0,0.25); }
+
+        /* Glass Card BOS 3D */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.16) !important;
+            backdrop-filter: blur(14px) !important;
+            -webkit-backdrop-filter: blur(14px) !important;
+            border: 2px solid rgba(255, 255, 255, 0.35) !important;
+            box-shadow: 0 18px 36px rgba(0, 0, 0, 0.35), 0 8px 0 rgba(0, 0, 0, 0.3) !important;
+        }
         .glass-table { color: #ffffff !important; border-color: rgba(255,255,255,0.2) !important; }
-        .glass-table thead th { background: rgba(255, 255, 255, 0.2) !important; color: #ffffff !important; border-bottom: 2px solid rgba(255,255,255,0.4) !important; text-transform: uppercase; letter-spacing: 1px; font-size: 0.9rem; }
+        .glass-table thead th { background: rgba(255, 255, 255, 0.22) !important; color: #ffffff !important; border-bottom: 2px solid rgba(255,255,255,0.4) !important; text-transform: uppercase; letter-spacing: 1px; font-size: 0.88rem; }
         .glass-table tbody td { background: transparent !important; color: #ffffff !important; border-bottom: 1px solid rgba(255,255,255,0.15) !important; }
-        .glass-table tbody tr:hover td { background: rgba(255,255,255,0.1) !important; }
-        .glass-table tfoot th { background: rgba(0, 0, 0, 0.4) !important; color: #ffc107 !important; border-top: 2px solid rgba(255,255,255,0.4) !important; }
+        .glass-table tbody tr:hover td { background: rgba(255,255,255,0.12) !important; }
+        .glass-table tfoot th { background: rgba(0, 0, 0, 0.45) !important; color: #ffc107 !important; border-top: 2px solid rgba(255,255,255,0.4) !important; }
 
-        .profile-card { border: none; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-radius: 1rem; position: relative; }
-        .profile-card iframe { border: none; width: 100%; height: 100%; }
-        
+        /* Visi Misi Expand */
         .visi-misi-content { max-height: 290px; overflow: hidden; position: relative; transition: max-height 0.6s ease; }
         .visi-misi-content.expanded { max-height: 3000px; }
         .visi-misi-fade { position: absolute; bottom: 0; left: 0; right: 0; height: 60px; background: linear-gradient(rgba(255,255,255,0), rgba(255,255,255,1)); pointer-events: none; transition: opacity 0.4s; }
         .visi-misi-fade.hidden { opacity: 0; }
 
-        #loginGembok { cursor: pointer; transition: color 0.3s; padding: 5px;}
-        #loginGembok:hover { color: #dc3545 !important;}
+        /* Admin Visibility */
+        .admin-panel { display: none !important; }
+        .is-admin .admin-panel { display: block !important; }
+        .is-admin .admin-panel-inline { display: inline-block !important; }
 
-        .wa-float { 
-            position: fixed; width: 60px; height: 60px; bottom: 80px; right: 20px; 
-            background-color: #25d366; color: #FFF; border-radius: 50px; text-align: center; 
-            font-size: 30px; box-shadow: 0px 4px 10px rgba(0,0,0,0.15); z-index: 1000; 
-            display: flex; align-items: center; justify-content: center; text-decoration: none; 
-            animation: pulse-wa 2s infinite;
+        /* Katalog Ikon Aplikasi 3D (100+ Ikon) */
+        .icon-picker-grid {
+            max-height: 250px;
+            overflow-y: auto;
+            padding: 10px;
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(46px, 1fr));
+            gap: 10px;
         }
-        .wa-float:hover { background-color: #128c7e; color: #FFF; transform: scale(1.1); }
-        @keyframes pulse-wa { 0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); } 70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); } 100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); } }
+        .icon-option {
+            width: 46px;
+            height: 46px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #e2e8f0;
+            border-radius: 13px;
+            cursor: pointer;
+            transition: all 0.18s;
+            font-size: 1.25rem;
+            color: #475569;
+            background-color: white;
+            box-shadow: 0 3px 0 #cbd5e1;
+        }
+        .icon-option:hover {
+            border-color: #dc3545;
+            color: #dc3545;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 0 #cbd5e1;
+        }
+        .icon-option.selected {
+            border-color: #ff8590;
+            background: linear-gradient(135deg, #dc3545, #800000);
+            color: white;
+            transform: translateY(-3px) scale(1.06);
+            box-shadow: 0 5px 0 #5a0000, 0 8px 15px rgba(220, 53, 69, 0.35);
+        }
+
+        /* Floating WhatsApp 3D */
+        .wa-float {
+            position: fixed; width: 58px; height: 58px; bottom: 85px; right: 20px;
+            background: linear-gradient(145deg, #25d366, #128c7e); color: #FFF; border-radius: 50px;
+            font-size: 28px; box-shadow: 0 6px 0 #075e54, 0 12px 22px rgba(37, 211, 102, 0.4);
+            z-index: 1035; display: flex; align-items: center; justify-content: center; text-decoration: none;
+            border: 2px solid #ffffff; transition: transform 0.2s;
+        }
+        .wa-float:hover { color: #FFF; transform: translateY(-4px) scale(1.08); }
         @media (min-width: 768px) { .wa-float { bottom: 30px; right: 30px; } }
-
-        .stat-card { color: white; border-radius: 0.8rem; padding: 1.2rem 0.5rem; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); transition: transform 0.3s; }
-        .stat-card:hover { transform: translateY(-5px); }
-        .stat-card i { font-size: 1.8rem; margin-bottom: 0.5rem; opacity: 0.8; } 
-        .stat-card h3 { font-weight: 800; margin-bottom: 0.2rem; font-size: 1.5rem;} 
-        .stat-card small { font-size: 0.8rem; font-weight: 500;} 
-        
-        .stat-color-0 { background: linear-gradient(135deg, #dc3545, #800000); } .stat-color-1 { background-color: #198754; } .stat-color-2 { background-color: #dc3545; }
-        .stat-color-3 { background-color: #ffc107; color: #212529 !important; } .stat-color-4 { background-color: #0dcaf0; color: #212529 !important; }
-        .stat-color-5 { background-color: #212529; } .stat-color-6 { background-color: #6c757d; } .stat-color-7 { background-color: #6f42c1; }
-
-        .icon-option { width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; border: 2px solid #dee2e6; border-radius: 10px; cursor: pointer; transition: all 0.2s; font-size: 1.4rem; color: #6c757d; background-color: white; }
-        .icon-option:hover { border-color: #dc3545; color: #dc3545; background-color: #f8f9fa; }
-        .icon-option.selected { border-color: #dc3545; background-color: #dc3545; color: white; transform: scale(1.1); box-shadow: 0 4px 10px rgba(220, 53, 69, 0.3); }
 
         .footer-link { color: #adb5bd; text-decoration: none; transition: color 0.3s; }
         .footer-link:hover { color: #ffffff; }
-        .footer-icon-btn { width: 40px; height: 40px; background-color: #495057; border: none; color: white; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: background-color 0.3s; text-decoration: none;}
-        .footer-icon-btn:hover { background-color: #dc3545; color: white; }
+        .footer-icon-btn { width: 40px; height: 40px; background-color: #495057; border: none; color: white; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: all 0.3s; text-decoration: none; box-shadow: 0 4px 0 #212529; }
+        .footer-icon-btn:hover { background-color: #dc3545; color: white; transform: translateY(-3px); }
+
+        #loginGembok { cursor: pointer; transition: color 0.3s; padding: 5px; }
+        #loginGembok:hover { color: #dc3545 !important; }
+        .toast-container { position: fixed; top: 20px; right: 20px; z-index: 2050; }
     </style>
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top d-none d-md-flex">
+<div id="app-3d-shell">
+
+    <!-- Notifikasi Toast -->
+    <div class="toast-container">
+        <div id="appToast" class="toast align-items-center text-white bg-success border-0 shadow-lg rounded-4" role="alert">
+            <div class="d-flex">
+                <div class="toast-body fw-bold" id="appToastMsg">Berhasil disimpan!</div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Banner Mode Preview (Hanya aktif saat IS_PREVIEW = true) -->
+    <div id="previewBanner" class="bg-warning bg-opacity-25 border-bottom border-warning py-2 px-3 d-none">
+        <div class="container d-flex flex-wrap align-items-center justify-content-between gap-2">
+            <div class="small fw-bold text-dark">
+                <span class="badge bg-warning text-dark me-2"><i class="fas fa-cube me-1"></i>MODE PREVIEW 3D AKTIF</span>
+                Simulasi memori lokal browser (Tanpa koneksi Supabase).
+            </div>
+            <div class="d-flex gap-2">
+                <button class="btn btn-sm btn-3d btn-3d-danger py-1 px-3" onclick="quickLoginPreview('admin')">
+                    <i class="fas fa-user-shield me-1"></i>Quick Login Admin
+                </button>
+                <button class="btn btn-sm btn-3d btn-3d-warning py-1 px-3" onclick="quickLoginPreview('operator')">
+                    <i class="fas fa-user-edit me-1"></i>Quick Login Operator
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navbar Desktop (Tampilan Menu Persis Versi Awal) -->
+    <nav class="navbar navbar-expand-lg navbar-light navbar-top-3d sticky-top d-none d-md-flex">
         <div class="container">
-            <a class="navbar-brand fw-bold text-danger d-flex align-items-center" href="#">
-                <img id="navLogo" src="" alt="Logo" style="width: 30px; height: 30px; object-fit: contain;" class="me-2 d-none">
-                <i id="navIcon" class="fas fa-graduation-cap me-2"></i>SDN 27 BANAWA SELATAN
+            <a class="navbar-brand fw-bolder text-danger d-flex align-items-center" href="#beranda">
+                <img id="navLogo" src="https://i.ibb.co.com/5xhN0cm1/Logo-Donggala.png" alt="Logo" style="width: 36px; height: 36px; object-fit: contain;" class="me-2 bg-white rounded-3 p-1 shadow-sm">
+                <span id="navBrandText">SDN 27 BANAWA SELATAN</span>
             </a>
-            <ul class="navbar-nav ms-auto">
+            <ul class="navbar-nav ms-auto align-items-center">
                 <li class="nav-item"><a class="nav-link" href="#beranda">Beranda</a></li>
                 <li class="nav-item"><a class="nav-link" href="#berita">Berita</a></li>
                 <li class="nav-item"><a class="nav-link" href="#profil">Profil & Visi Misi</a></li>
                 <li class="nav-item"><a class="nav-link" href="#danabos">Dana BOS</a></li>
                 <li class="nav-item"><a class="nav-link" href="#aplikasi">Layanan</a></li>
-                <li class="nav-item"><a class="nav-link text-warning fw-bold" href="#" id="navSpmbLink" target="_blank">SPMB</a></li>
-                <li class="nav-item"><a class="nav-link" href="#" id="navBukuTamuLink" target="_blank">Buku Tamu</a></li>
-                <li class="nav-item admin-panel"><a class="nav-link text-danger fw-bold" href="#" onclick="logout()"><i class="fas fa-sign-out-alt me-1"></i>Logout</a></li>
+                <li class="nav-item ms-1"><a class="nav-link spmb-highlight" href="#" id="navSpmbLink" target="_blank">SPMB</a></li>
+                <li class="nav-item ms-1"><a class="nav-link" href="#" id="navBukuTamuLink" onclick="openBukuTamuAction(event)">Buku Tamu</a></li>
+                <li class="nav-item admin-panel ms-2">
+                    <button class="btn btn-sm btn-3d btn-3d-warning px-3" onclick="openSettingsModal()"><i class="fas fa-cogs me-1"></i>CMS</button>
+                </li>
+                <li class="nav-item admin-panel ms-2">
+                    <button class="btn btn-sm btn-3d btn-3d-danger px-3" onclick="logoutApp()"><i class="fas fa-sign-out-alt me-1"></i>Logout</button>
+                </li>
             </ul>
         </div>
     </nav>
 
+    <!-- Hero Section 3D -->
     <section id="beranda" class="hero-section text-center">
         <div id="heroSlider" class="hero-slider"></div>
         <div class="container hero-content">
-            <h1 class="display-4 fw-bold" id="heroJudul">SDN 27 BANAWA SELATAN</h1>
-            <p class="lead mt-3 mb-4" id="heroSubjudul">DINAS PENDIDIKAN PEMUDA DAN OLAHRAGA KAB.DONGGALA</p>
-            <a href="#" class="btn btn-warning btn-lg fw-bold rounded-pill px-4 shadow mb-3" id="heroTombol" target="_blank">Pendaftaran Siswa Baru</a>
+            <h1 class="display-4 fw-bolder" id="heroJudul">SDN 27 BANAWA SELATAN</h1>
+            <p class="lead mt-3 mb-4 fw-semibold" id="heroSubjudul">DINAS PENDIDIKAN PEMUDA DAN OLAHRAGA KAB. DONGGALA</p>
+            <a href="#" class="btn btn-3d btn-3d-warning btn-lg rounded-pill px-4 py-2 mb-3" id="heroTombol" target="_blank">
+                <i class="fas fa-user-plus me-2"></i>Pendaftaran Siswa Baru
+            </a>
             <div class="admin-panel mt-3">
-                <label class="btn btn-light btn-sm text-dark shadow"><i class="fas fa-camera me-1"></i>Tambah Gambar Background Hero
+                <label class="btn btn-light btn-sm text-dark shadow fw-bold rounded-pill px-3 py-2">
+                    <i class="fas fa-camera me-1 text-danger"></i>Tambah Gambar Background Hero
                     <input type="file" accept="image/*" class="d-none" multiple onchange="handleBgUpload(this)">
                 </label>
                 <div id="bgLoading" class="text-warning mt-2 d-none spinner-border spinner-border-sm"></div>
@@ -135,64 +459,71 @@
         </div>
     </section>
 
-    <section id="berita" class="py-5 bg-light">
+    <!-- Berita Section 3D -->
+    <section id="berita" class="py-5">
         <div class="container position-relative">
-            <h2 class="section-title">Berita & Pengumuman Terbaru</h2>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h2 class="section-title mx-auto mb-4">Berita & Pengumuman Terbaru</h2>
+            </div>
+            <div class="text-center mb-3 admin-panel">
+                <button class="btn btn-3d btn-3d-danger btn-sm px-3 py-2" onclick="openAddBeritaModal()"><i class="fas fa-plus me-1"></i>Tulis Berita Baru</button>
+            </div>
             <div class="slider-container-wrapper" id="beritaWrapper">
                 <button class="slider-btn prev"><i class="fas fa-chevron-left"></i></button>
-                <div class="custom-slider" id="beritaContainer">
-                    <div class="w-100 text-center text-muted py-4"><div class="spinner-border text-danger spinner-border-sm"></div> Memuat berita...</div>
-                </div>
+                <div class="custom-slider" id="beritaContainer"></div>
                 <button class="slider-btn next"><i class="fas fa-chevron-right"></i></button>
             </div>
         </div>
     </section>
 
-    <section id="profil" class="pt-5 bg-white">
+    <!-- Profil & Visi Misi Section 3D -->
+    <section id="profil" class="pt-5 pb-4 bg-white bg-opacity-75">
         <div class="container">
-            <div class="row align-items-start mb-5">
-                <div class="col-lg-6 mb-4 mb-lg-0">
-                    <div class="card profile-card bg-dark position-relative">
-                        <div class="ratio ratio-16x9 position-relative" id="videoWrapper">
-                            <iframe id="ksVideo" src="" title="Video Profil" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                        </div>                       
-                    </div>
-                </div>
-                <div class="col-lg-6 d-flex flex-column justify-content-start">
-                    <h4 class="fw-bold text-danger mb-3 mt-0" style="padding-top:0;">Visi dan Misi Sekolah</h4>
-                    <div class="position-relative">
-                        <div id="ksSambutanWrapper" class="visi-misi-content">
-                            <p class="text-muted text-justify lead mb-0" style="line-height: 1.8; font-size: 1.05rem;" id="ksSambutan">Memuat teks visi dan misi...</p>
+            <div class="row align-items-start mb-4 g-4">
+                <div class="col-lg-6">
+                    <div class="card-3d p-3 bg-dark position-relative">
+                        <div class="ratio ratio-16x9 rounded-4 overflow-hidden position-relative" id="videoWrapper">
+                            <iframe id="ksVideo" src="" title="Video Profil" allowfullscreen></iframe>
                         </div>
-                        <div class="visi-misi-fade" id="visiMisiFade"></div>
                     </div>
-                    <div>
-                        <button class="btn btn-link text-decoration-none p-0 mt-2 fw-bold text-danger" id="btnSelengkapnya" onclick="toggleVisiMisi()" style="display: none;">Selengkapnya <i class="fas fa-chevron-down ms-1"></i></button>
+                    <div class="mt-3 text-center text-muted small fw-bold" id="ksNamaDisplay"></div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card-3d p-4">
+                        <h4 class="fw-bolder text-danger mb-3 mt-0"><i class="fas fa-bullseye me-2"></i>Visi dan Misi Sekolah</h4>
+                        <div class="position-relative">
+                            <div id="ksSambutanWrapper" class="visi-misi-content">
+                                <div class="text-muted lead mb-0" style="line-height: 1.8; font-size: 1.02rem; white-space: pre-line;" id="ksSambutan">Memuat teks visi dan misi...</div>
+                            </div>
+                            <div class="visi-misi-fade" id="visiMisiFade"></div>
+                        </div>
+                        <div>
+                            <button class="btn btn-link text-decoration-none p-0 mt-2 fw-bold text-danger" id="btnSelengkapnya" onclick="toggleVisiMisi()" style="display: none;">Selengkapnya <i class="fas fa-chevron-down ms-1"></i></button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="pb-5 bg-white">
+    <!-- Statistik Section 3D -->
+    <section class="pb-5 pt-2 bg-white bg-opacity-75">
         <div class="container">
-            <div class="row g-3 justify-content-center" id="statContainer">
-                <div class="col-12 text-center text-muted"><div class="spinner-border text-danger spinner-border-sm"></div> Memuat data sekolah...</div>
-            </div>
+            <div class="row g-3 justify-content-center" id="statContainer"></div>
         </div>
     </section>
 
+    <!-- Transparansi Dana BOS 3D -->
     <section id="danabos" class="py-5 position-relative" style="background-color: #800000; background-size: cover; background-position: center; background-attachment: fixed;">
-        <div class="position-absolute top-0 start-0 w-100 h-100" style="background-color: rgba(128, 0, 0, 0.7); z-index: 1;"></div>
+        <div class="position-absolute top-0 start-0 w-100 h-100" style="background-color: rgba(128, 0, 0, 0.78); z-index: 1;"></div>
         <div class="container position-relative" style="z-index: 2;">
             <h2 class="section-title text-white">Transparansi Dana BOS Sekolah</h2>
             <div class="admin-panel text-center mb-4">
-                <label class="btn btn-warning btn-sm shadow"><i class="fas fa-camera me-1"></i>Ganti Background BOS
+                <label class="btn btn-3d btn-3d-warning btn-sm px-3 py-2">
+                    <i class="fas fa-camera me-1"></i>Ganti Background BOS
                     <input type="file" accept="image/*" class="d-none" onchange="handleBosBgUpload(this)">
                 </label>
-                <div id="bosBgLoading" class="text-warning mt-2 d-none spinner-border spinner-border-sm"></div>
             </div>
-            
             <div class="row justify-content-center">
                 <div class="col-lg-9">
                     <div class="card glass-card rounded-4 overflow-hidden">
@@ -222,80 +553,86 @@
         </div>
     </section>
 
+    <!-- Layanan & Aplikasi 3D -->
     <section id="aplikasi" class="py-5 bg-white">
         <div class="container position-relative">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h3 class="fw-bold text-dark border-bottom border-danger border-3 pb-2">Layanan & Aplikasi</h3>
-                <button class="btn btn-danger btn-sm admin-panel shadow-sm" onclick="openAddAppModal()"><i class="fas fa-plus"></i> Tambah Aplikasi</button>
+                <h3 class="fw-bolder text-dark border-bottom border-danger border-3 pb-2">Layanan & Aplikasi</h3>
+                <button class="btn btn-3d btn-3d-danger btn-sm admin-panel px-3 py-2" onclick="openAddAppModal()">
+                    <i class="fas fa-plus me-1"></i>Tambah Aplikasi
+                </button>
             </div>
             <div class="slider-container-wrapper" id="appWrapper">
                 <button class="slider-btn prev"><i class="fas fa-chevron-left"></i></button>
-                <div class="custom-slider" id="appContainer">
-                    <div class="w-100 text-center text-muted py-3">Memuat aplikasi...</div>
-                </div>
+                <div class="custom-slider" id="appContainer"></div>
                 <button class="slider-btn next"><i class="fas fa-chevron-right"></i></button>
             </div>
         </div>
     </section>
 
-    <section id="galeri" class="py-5 bg-light">
+    <!-- Galeri Kegiatan 3D -->
+    <section id="galeri" class="py-5">
         <div class="container position-relative">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h3 class="fw-bold text-dark border-bottom border-success border-3 pb-2">Galeri Kegiatan</h3>
-                <button class="btn btn-success btn-sm admin-panel shadow-sm" data-bs-toggle="modal" data-bs-target="#galeriModal"><i class="fas fa-upload"></i> Upload Foto</button>
+                <h3 class="fw-bolder text-dark border-bottom border-success border-3 pb-2">Galeri Kegiatan</h3>
+                <button class="btn btn-3d btn-3d-success btn-sm admin-panel px-3 py-2" data-bs-toggle="modal" data-bs-target="#galeriModal">
+                    <i class="fas fa-upload me-1"></i>Upload Foto
+                </button>
             </div>
             <div class="slider-container-wrapper" id="galeriWrapper">
                 <button class="slider-btn prev"><i class="fas fa-chevron-left"></i></button>
-                <div class="custom-slider" id="galeriContainer">
-                    <div class="w-100 text-center text-muted py-3">Memuat galeri...</div>
-                </div>
+                <div class="custom-slider" id="galeriContainer"></div>
                 <button class="slider-btn next"><i class="fas fa-chevron-right"></i></button>
             </div>
         </div>
     </section>
 
+    <!-- Floating WhatsApp -->
     <a href="https://wa.me/6281234567890" id="waFloatBtn" class="wa-float" target="_blank" title="Chat WhatsApp Admin">
         <i class="fab fa-whatsapp"></i>
     </a>
 
+    <!-- Footer (Versi Awal) -->
     <footer style="background-color: #212529; color: #adb5bd;" class="pt-5 pb-4">
         <div class="container">
             <div class="row gy-4 mb-4">
                 <div class="col-lg-5 col-md-12 pe-lg-5">
                     <div class="d-flex align-items-center mb-4">
-                        <img id="footerLogo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Lambang_Kabupaten_Donggala.png/400px-Lambang_Kabupaten_Donggala.png" alt="Logo" class="rounded bg-white p-1 me-3" style="width: 55px; height: 55px; object-fit: contain;">
+                        <img id="footerLogo" src="https://i.ibb.co.com/5xhN0cm1/Logo-Donggala.png" alt="Logo" class="rounded-3 bg-white p-1 me-3 shadow" style="width: 55px; height: 55px; object-fit: contain;">
                         <div>
-                            <h4 class="fw-bold text-white mb-0" style="letter-spacing: 0.5px;">SDN 27 BANAWA SELATAN</h4>
+                            <h4 class="fw-bold text-white mb-0" style="letter-spacing: 0.5px;" id="footerJudulSekolah">SDN 27 BANAWA SELATAN</h4>
                             <small class="fw-bold" style="color: #868e96;">KABUPATEN DONGGALA</small>
                         </div>
                     </div>
-                    <p class="small lh-lg mb-4 text-justify">Organisasi Perangkat Daerah yang menyelenggarakan urusan pemerintahan bidang Pendidikan, bidang Kepemudaan, dan bidang Olahraga di Kabupaten Donggala, Provinsi Sulawesi Tengah.</p>
-                    <div class="d-flex gap-2">
-                        <a href="#" id="fbLink" class="footer-icon-btn"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" id="instaLink" class="footer-icon-btn"><i class="fab fa-instagram"></i></a>
-                        <a href="#" id="ytLink" class="footer-icon-btn"><i class="fab fa-youtube"></i></a>
+                    <p class="small lh-lg mb-4" id="footerDeskripsi">Satuan Pendidikan Sekolah Dasar Negeri di bawah naungan Dinas Pendidikan, Pemuda dan Olahraga Kabupaten Donggala, Provinsi Sulawesi Tengah.</p>
+                    <div class="d-flex gap-2 flex-wrap">
+                        <a href="#" id="fbLink" target="_blank" class="footer-icon-btn d-none" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" id="instaLink" target="_blank" class="footer-icon-btn d-none" title="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" id="ytLink" target="_blank" class="footer-icon-btn d-none" title="YouTube"><i class="fab fa-youtube"></i></a>
+                        <a href="#" id="tiktokLink" target="_blank" class="footer-icon-btn d-none" title="TikTok"><i class="fab fa-tiktok"></i></a>
+                        <a href="#" id="xLink" target="_blank" class="footer-icon-btn d-none" title="X / Twitter"><i class="fab fa-x-twitter"></i></a>
                     </div>
                 </div>
-                
+
                 <div class="col-lg-3 col-md-6">
                     <h5 class="text-white fw-bold mb-4 pb-2" style="border-bottom: 1px solid #495057; display: inline-block;">Tautan Terkait</h5>
                     <ul class="list-unstyled mt-2 small">
                         <li class="mb-3"><a href="https://www.kemdikbud.go.id/" target="_blank" class="footer-link"><i class="fas fa-chevron-right me-2 text-secondary"></i>Kemendikdasmen RI</a></li>
-                        <li class="mb-3"><a href="https://www.kemenpora.go.id/" target="_blank" class="footer-link"><i class="fas fa-chevron-right me-2 text-secondary"></i>Kemenpora RI</a></li>
+                        <li class="mb-3"><a href="https://dapo.kemdikbud.go.id/" target="_blank" class="footer-link"><i class="fas fa-chevron-right me-2 text-secondary"></i>Portal Dapodik</a></li>
                         <li class="mb-3"><a href="https://donggalakab.go.id/" target="_blank" class="footer-link"><i class="fas fa-chevron-right me-2 text-secondary"></i>Pemerintah Kab. Donggala</a></li>
                     </ul>
                 </div>
-                
+
                 <div class="col-lg-4 col-md-6">
                     <h5 class="text-white fw-bold mb-4 pb-2" style="border-bottom: 1px solid #495057; display: inline-block;">Hubungi Kami</h5>
                     <ul class="list-unstyled mt-2 small">
                         <li class="mb-3 d-flex align-items-start">
                             <i class="fas fa-map-marker-alt me-3 mt-1 text-danger" style="font-size: 1.1rem;"></i>
-                            <span id="footerAlamat">Desa Lumbumamara, Banawa Selatan, Kab. Donggala.</span>
+                            <span id="footerAlamat">Kec. Pinembani, Kabupaten Donggala, Sulawesi Tengah</span>
                         </li>
                         <li class="mb-3 d-flex align-items-center">
                             <i class="fas fa-phone-alt me-3 text-danger" style="font-size: 1.1rem;"></i>
-                            <span>0812-8071-2635</span>
+                            <span id="footerTelepon">-</span>
                         </li>
                         <li class="mb-3 d-flex align-items-center">
                             <i class="fab fa-whatsapp me-3 text-success" style="font-size: 1.2rem;"></i>
@@ -303,30 +640,167 @@
                         </li>
                         <li class="mb-3 d-flex align-items-center">
                             <i class="fas fa-envelope me-3 text-danger" style="font-size: 1.1rem;"></i>
-                            <span>sdnlimabansel.com</span>
+                            <span id="footerEmail">sdn8pinembani@gmail.com</span>
                         </li>
                     </ul>
                 </div>
             </div>
             <hr style="border-color: #495057;" class="my-4">
             <div class="d-flex flex-column flex-md-row justify-content-between align-items-center small" style="color: #868e96;">
-                <span class="mb-2 mb-md-0">&copy; 2026 sdn 27 BANAWA SELATAN.</span>
+                <span class="mb-2 mb-md-0">&copy; Sekolah Dasar Negeri 8 Pinembani</span>
                 <span>Hak Cipta Dilindungi Undang-Undang. <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal" id="loginGembok" class="text-secondary text-decoration-none ms-2">@</a></span>
             </div>
         </div>
     </footer>
 
+    <!-- Mobile Bottom Navigation (Persis Versi Awal) -->
     <nav class="bottom-nav d-md-none">
-        <a href="#beranda" class="active"><i class="fas fa-home"></i></a>
-        <a href="#berita"><i class="fas fa-newspaper"></i></a>
-        <a href="#profil"><i class="fas fa-school"></i></a>
-        <a href="#" id="mobileNavSpmbLink" target="_blank"><i class="fas fa-user-plus"></i></a>
-        <a href="#" id="mobileNavBukuTamuLink" target="_blank"><i class="fas fa-envelope"></i></a>
+        <a href="#beranda" class="active"><i class="fas fa-home"></i><br>Beranda</a>
+        <a href="#berita"><i class="fas fa-newspaper"></i><br>Berita</a>
+        <a href="#profil"><i class="fas fa-school"></i><br>Profil</a>
+        <a href="#" id="mobileNavSpmbLink" target="_blank"><i class="fas fa-user-plus"></i><br>SPMB</a>
+        <a href="#" id="mobileNavBukuTamuLink" onclick="openBukuTamuAction(event)"><i class="fas fa-book-open"></i><br>Buku Tamu</a>
+        <a href="#" class="admin-panel text-danger" onclick="openSettingsModal()"><i class="fas fa-cogs"></i><br>Admin</a>
     </nav>
 
-    <div class="modal fade" id="beritaDetailModal" tabindex="-1" aria-hidden="true">
+    <!-- ==================== MODALS ==================== -->
+
+    <!-- Modal Buku Tamu Digital Terintegrasi -->
+    <div class="modal fade" id="bukuTamuModal" tabindex="-1">
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content border-0 shadow">
+            <div class="modal-content card-3d border-0 overflow-hidden">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title fw-bold"><i class="fas fa-book-open me-2"></i>Buku Tamu Digital SDN 27 BANAWA SELATAN</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="row g-4">
+                        <div class="col-md-5">
+                            <h6 class="fw-bold text-danger mb-3">Isi Daftar Kunjungan</h6>
+                            <form id="formBukuTamu">
+                                <div class="mb-2"><input type="text" id="btNama" class="form-control" placeholder="Nama Lengkap" required></div>
+                                <div class="mb-2"><input type="text" id="btInstansi" class="form-control" placeholder="Instansi / Wali Siswa" required></div>
+                                <div class="mb-2"><input type="text" id="btHp" class="form-control" placeholder="Nomor WhatsApp / HP" required></div>
+                                <div class="mb-3"><textarea id="btKeperluan" class="form-control" rows="3" placeholder="Keperluan Kunjungan" required></textarea></div>
+                                <button type="submit" class="btn btn-3d btn-3d-danger w-100 py-2">Simpan Buku Tamu</button>
+                            </form>
+                            <a href="#" id="btnExtBukuTamu" target="_blank" class="btn btn-sm btn-outline-secondary w-100 mt-3 d-none">Buka Link Form Eksternal</a>
+                        </div>
+                        <div class="col-md-7">
+                            <h6 class="fw-bold text-dark mb-3">Riwayat Tamu Terbaru</h6>
+                            <div class="table-responsive" style="max-height: 290px;">
+                                <table class="table table-sm table-hover small align-middle">
+                                    <thead class="table-light"><tr><th>Tanggal</th><th>Nama / Instansi</th><th>Keperluan</th><th class="admin-panel"></th></tr></thead>
+                                    <tbody id="bukuTamuList"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Tambah/Edit Aplikasi (Dilengkapi 100+ Ikon Pilihan & Pencarian) -->
+    <div class="modal fade" id="appModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content card-3d border-0 overflow-hidden">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title fw-bold" id="appModalTitle"><i class="fas fa-th-large me-2"></i>Tambah Menu Aplikasi</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <input type="hidden" id="appId" value="">
+                    <div class="row g-2 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small">Nama Aplikasi / Layanan</label>
+                            <input type="text" id="appName" class="form-control" placeholder="Cth: E-Rapor, Dapodik, Perpustakaan..." autocomplete="off">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small">URL Link Tujuan</label>
+                            <input type="text" id="appUrl" class="form-control" placeholder="https://..." autocomplete="off">
+                        </div>
+                    </div>
+
+                    <!-- Filter Kategori & Pencarian Ikon -->
+                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-2">
+                        <label class="form-label fw-bold small text-danger mb-0">
+                            <i class="fas fa-icons me-1"></i>Pilih Ikon Aplikasi (Tersedia 105+ Ikon 3D):
+                        </label>
+                        <div class="d-flex gap-2">
+                            <select id="iconCategoryFilter" class="form-select form-select-sm" style="width: 165px;" onchange="renderIconCatalog()">
+                                <option value="all">Semua Kategori (105+)</option>
+                                <option value="rekomendasi">Rekomendasi Otomatis</option>
+                                <option value="akademik">Akademik & Rapor</option>
+                                <option value="data">Dapodik, IT & Data</option>
+                                <option value="keuangan">Keuangan, BOS & PIP</option>
+                                <option value="warga">Guru, Siswa & Absensi</option>
+                                <option value="sarpras">Sarpras, UKS & Gedung</option>
+                                <option value="dokumen">Surat, Arsip & Jadwal</option>
+                                <option value="media">Media, Prestasi & Umum</option>
+                            </select>
+                            <input type="text" id="iconSearchInput" class="form-control form-control-sm" style="width: 150px;" placeholder="Cari nama ikon..." oninput="renderIconCatalog()">
+                        </div>
+                    </div>
+
+                    <!-- Grid Katalog 100+ Ikon -->
+                    <div id="iconOptionsContainer" class="icon-picker-grid mb-3"></div>
+                    <div class="d-flex align-items-center justify-content-between bg-light p-2 px-3 rounded-3 mb-3 border">
+                        <span class="small fw-semibold text-muted">Ikon Terpilih Saat Ini:</span>
+                        <span class="badge bg-danger px-3 py-2 fs-6" id="selectedIconPreview"><i class="fas fa-link me-2"></i>fa-link</span>
+                    </div>
+                    <input type="hidden" id="selectedAppIcon" value="fa-link">
+
+                    <button class="btn btn-3d btn-3d-danger w-100 py-2" id="btnSaveApp" onclick="saveApp()">
+                        <i class="fas fa-save me-1"></i>Simpan Aplikasi Layanan
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Hybrid Login Admin & Operator -->
+    <div class="modal fade" id="loginModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content card-3d border-0 overflow-hidden">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title fw-bold"><i class="fas fa-lock me-2"></i>Admin & Operator Area</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <ul class="nav nav-pills nav-fill bg-light p-1 rounded-3 mb-3" role="tablist">
+                        <li class="nav-item">
+                            <button class="nav-link active fw-bold small" data-bs-toggle="pill" data-bs-target="#tab-login-op" type="button">Operator (Tabel)</button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link fw-bold small" data-bs-toggle="pill" data-bs-target="#tab-login-adm" type="button">Admin (Supabase Auth)</button>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="tab-login-op">
+                            <form onsubmit="event.preventDefault(); loginOperator();">
+                                <div class="mb-2"><input type="text" id="opUser" class="form-control" placeholder="Username Operator" required></div>
+                                <div class="mb-3"><input type="password" id="opPass" class="form-control" placeholder="Password" required></div>
+                                <button type="submit" class="btn btn-3d btn-3d-danger w-100 py-2" id="btnLoginOp">Masuk Sistem (Operator)</button>
+                            </form>
+                        </div>
+                        <div class="tab-pane fade" id="tab-login-adm">
+                            <form onsubmit="event.preventDefault(); loginAdminAuth();">
+                                <div class="mb-2"><input type="email" id="adminEmail" class="form-control" placeholder="Email Admin Supabase" required></div>
+                                <div class="mb-3"><input type="password" id="adminPass" class="form-control" placeholder="Password" required></div>
+                                <button type="submit" class="btn btn-3d btn-3d-danger w-100 py-2" id="btnLoginAdmin">Masuk Sistem (Super Admin)</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Detail Berita -->
+    <div class="modal fade" id="beritaDetailModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content card-3d border-0 overflow-hidden">
                 <div class="modal-header bg-danger text-white">
                     <h5 class="modal-title fw-bold" id="detailBeritaJudul">Judul Berita</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
@@ -339,92 +813,113 @@
                     </div>
                     <div class="p-4">
                         <small class="text-danger fw-bold mb-3 d-block"><i class="far fa-calendar-alt me-2"></i><span id="detailBeritaTanggal"></span></small>
-                        <div id="detailBeritaKonten" class="text-justify" style="white-space: pre-wrap; line-height: 1.8; color: #444;"></div>
+                        <div id="detailBeritaKonten" style="white-space: pre-wrap; line-height: 1.8; color: #333;"></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" id="loginModal" tabindex="-1"><div class="modal-dialog modal-dialog-centered modal-sm"><div class="modal-content border-0 shadow"><div class="modal-header bg-danger text-white"><h5 class="modal-title"><i class="fas fa-lock me-2"></i>Admin Area</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div class="modal-body p-4"><div class="mb-2"><input type="text" id="username" class="form-control" placeholder="Username"></div><div class="mb-3"><input type="password" id="password" class="form-control" placeholder="Password"></div><button class="btn btn-danger w-100 shadow-sm" id="btnDoLogin" onclick="login()">Masuk Sistem</button></div></div></div></div>
-    
-    <div class="modal fade" id="appModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow">
-                <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title" id="appModalTitle">Tambah Menu Aplikasi</h5>
+    <!-- Modal Lightbox Galeri -->
+    <div class="modal fade" id="galeriDetailModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content bg-dark text-white border-0 shadow">
+                <div class="modal-header border-0 pb-0">
+                    <h6 class="modal-title fw-bold" id="detailGaleriJudul">Foto Kegiatan</h6>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body p-4">
-                    <input type="hidden" id="appId" value="">
-                    <input type="text" id="appName" class="form-control mb-3" placeholder="Nama Aplikasi (Ketik untuk cari ikon otomatis)" autocomplete="off">
-                    <input type="text" id="appUrl" class="form-control mb-4" placeholder="URL Link (https://...)" autocomplete="off">
-                    <label class="form-label fw-semibold small text-muted">Pilih Ikon Aplikasi:</label>
-                    <div id="iconOptionsContainer" class="d-flex gap-3 justify-content-center mb-3 flex-wrap"></div>
-                    <input type="hidden" id="selectedAppIcon" value="fa-link">
-                    <button class="btn btn-danger w-100 fw-bold mt-2" id="btnSaveApp" onclick="saveApp()">Simpan Aplikasi</button>
+                <div class="modal-body text-center p-3">
+                    <img id="detailGaleriImg" src="" class="img-fluid rounded" style="max-height: 75vh; object-fit: contain;">
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" id="galeriModal" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content border-0 shadow"><div class="modal-header bg-success text-white"><h5 class="modal-title">Upload Foto</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div class="modal-body p-4"><input type="text" id="fotoJudul" class="form-control mb-2" placeholder="Judul Foto"><input type="file" id="fotoFile" class="form-control mb-3" accept="image/*"><button class="btn btn-success w-100" id="btnSaveFoto" onclick="saveFoto()">Upload Foto</button></div></div></div></div>
+    <!-- Modal Upload Galeri -->
+    <div class="modal fade" id="galeriModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content card-3d border-0">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title fw-bold">Upload Foto Kegiatan</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <input type="text" id="fotoJudul" class="form-control mb-2" placeholder="Judul Kegiatan / Foto">
+                    <input type="file" id="fotoFile" class="form-control mb-3" accept="image/*">
+                    <button class="btn btn-3d btn-3d-success w-100 py-2" id="btnSaveFoto" onclick="saveFoto()">Upload Foto</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <!-- Modal Pengaturan CMS Lengkap -->
     <div class="modal fade" id="cmsSettingsModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered modal-xl">
-            <div class="modal-content border-0 shadow">
+        <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+            <div class="modal-content card-3d border-0 overflow-hidden">
                 <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title"><i class="fas fa-edit me-2"></i>Pengaturan Website Sekolah</h5>
+                    <h5 class="modal-title fw-bold"><i class="fas fa-edit me-2"></i>Pengaturan Website Sekolah (Supabase CMS)</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body p-0">
-                    <ul class="nav nav-pills bg-light nav-fill rounded-0" id="cmsTab" role="tablist">
-                        <li class="nav-item"><button class="nav-link active rounded-0 text-danger" data-bs-toggle="pill" data-bs-target="#tab-berita" type="button"><i class="fas fa-newspaper me-1"></i>Berita</button></li>
-                        <li class="nav-item"><button class="nav-link rounded-0 text-danger" data-bs-toggle="pill" data-bs-target="#tab-ks" type="button"><i class="fas fa-user me-1"></i>Profil & Visi Misi</button></li>
-                        <li class="nav-item"><button class="nav-link rounded-0 text-danger" data-bs-toggle="pill" data-bs-target="#tab-stat" type="button"><i class="fas fa-chart-bar me-1"></i>Statistik Dinamis</button></li>
-                        <li class="nav-item"><button class="nav-link rounded-0 text-danger" data-bs-toggle="pill" data-bs-target="#tab-bos" type="button"><i class="fas fa-money-bill-wave me-1"></i>BOS</button></li>
-                        <li class="nav-item"><button class="nav-link rounded-0 text-danger" data-bs-toggle="pill" data-bs-target="#tab-config" type="button"><i class="fas fa-cogs me-1"></i>Lainnya</button></li>
+                    <ul class="nav nav-pills bg-light nav-fill rounded-0 border-bottom" id="cmsTab" role="tablist">
+                        <li class="nav-item"><button class="nav-link active rounded-0 text-danger fw-semibold" data-bs-toggle="pill" data-bs-target="#tab-berita" type="button"><i class="fas fa-newspaper me-1"></i>Berita</button></li>
+                        <li class="nav-item"><button class="nav-link rounded-0 text-danger fw-semibold" data-bs-toggle="pill" data-bs-target="#tab-ks" type="button"><i class="fas fa-user me-1"></i>Profil & Visi Misi</button></li>
+                        <li class="nav-item"><button class="nav-link rounded-0 text-danger fw-semibold" data-bs-toggle="pill" data-bs-target="#tab-stat" type="button"><i class="fas fa-chart-bar me-1"></i>Statistik Dinamis</button></li>
+                        <li class="nav-item"><button class="nav-link rounded-0 text-danger fw-semibold" data-bs-toggle="pill" data-bs-target="#tab-bos" type="button"><i class="fas fa-money-bill-wave me-1"></i>BOS</button></li>
+                        <li class="nav-item"><button class="nav-link rounded-0 text-danger fw-semibold" data-bs-toggle="pill" data-bs-target="#tab-config" type="button"><i class="fas fa-cogs me-1"></i>Lainnya & Akun</button></li>
                     </ul>
-                    <div class="tab-content p-4" id="cmsTabContent">
-                        
+                    <div class="tab-content p-4">
+                        <!-- Tab Berita -->
                         <div class="tab-pane fade show active" id="tab-berita">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h6 class="fw-bold text-danger mb-0" id="formBeritaHeader">Publikasikan Berita Baru</h6>
+                                <button type="button" class="btn btn-sm btn-outline-secondary d-none" id="btnCancelEditBerita" onclick="resetFormBerita()">Batal Edit</button>
+                            </div>
                             <form id="formBerita">
+                                <input type="hidden" id="beritaIdEdit" value="">
                                 <div class="mb-3"><label class="form-label fw-semibold">Judul Berita</label><input type="text" class="form-control" id="beritaJudul" required></div>
                                 <div class="mb-3"><label class="form-label fw-semibold">Isi Berita</label><textarea class="form-control" id="beritaKonten" rows="5" required></textarea></div>
                                 <div class="mb-3">
                                     <label class="form-label fw-semibold">Pilih Foto Dokumentasi (Bisa lebih dari 1)</label>
                                     <input type="file" class="form-control bg-white" id="beritaFoto" accept="image/*" multiple required>
+                                    <small class="text-muted d-none" id="editBeritaFotoHint">*Kosongkan jika tidak ingin mengganti foto berita yang lama.</small>
                                 </div>
-                                <button type="submit" class="btn btn-danger w-100 fw-bold" id="btnSubmitBerita"><i class="fas fa-paper-plane me-1"></i>Publikasikan Berita & Slider Foto</button>
+                                <button type="submit" class="btn btn-3d btn-3d-danger w-100 py-2" id="btnSubmitBerita"><i class="fas fa-paper-plane me-1"></i>Publikasikan Berita & Slider Foto</button>
                             </form>
                         </div>
 
+                        <!-- Tab Profil & Visi Misi -->
                         <div class="tab-pane fade" id="tab-ks">
                             <form id="formKSConfig">
+                                <div class="row g-2 mb-3">
+                                    <div class="col-md-6"><label class="form-label fw-semibold">Judul Utama Hero</label><input type="text" class="form-control" id="heroJudulIn"></div>
+                                    <div class="col-md-6"><label class="form-label fw-semibold">Subjudul Hero</label><input type="text" class="form-control" id="heroSubjudulIn"></div>
+                                </div>
                                 <div class="mb-3"><label class="form-label fw-semibold">Nama Kepala Sekolah</label><input type="text" class="form-control" id="ksNamaIn"></div>
-                                <div class="mb-3"><label class="form-label fw-semibold">URL Video Sambutan (YouTube)</label><input type="text" class="form-control" id="ksVideoIn" placeholder="Contoh: https://youtube.com/shorts/xxx123"></div>
+                                <div class="mb-3"><label class="form-label fw-semibold">URL Video Sambutan / Profil (YouTube)</label><input type="text" class="form-control" id="ksVideoIn"></div>
                                 <div class="mb-3"><label class="form-label fw-semibold">Teks Visi & Misi Sekolah</label><textarea class="form-control" id="ksSambutanIn" rows="6"></textarea></div>
-                                <button type="submit" class="btn btn-danger w-100 fw-bold" id="btnSubmitKSConfig">Simpan Profil & Visi Misi</button>
+                                <button type="submit" class="btn btn-3d btn-3d-danger w-100 py-2">Simpan Profil & Visi Misi</button>
                             </form>
                         </div>
-                        
+
+                        <!-- Tab Statistik Dinamis -->
                         <div class="tab-pane fade" id="tab-stat">
-                            <div class="alert alert-info py-2"><small><i class="fas fa-info-circle me-1"></i>Perbarui angka di bawah lalu klik <b>Simpan</b>. Untuk menambah atau menghapus kartu, gunakan form di bawahnya.</small></div>
                             <form id="formUpdateStat">
                                 <div class="row g-2 mb-3" id="adminStatContainer"></div>
-                                <button type="submit" class="btn btn-success w-100 fw-bold mb-4" id="btnUpdateStat">Simpan Perubahan Angka Statistik</button>
+                                <button type="submit" class="btn btn-3d btn-3d-success w-100 py-2 mb-4">Simpan Perubahan Angka Statistik</button>
                             </form>
                             <hr class="my-4">
                             <h6 class="fw-bold text-danger mb-3">Tambah Kartu Statistik Baru</h6>
                             <form id="formTambahStat">
                                 <div class="row g-2">
-                                    <div class="col-md-6"><input type="text" id="newStatNama" class="form-control" placeholder="Nama" required></div>
-                                    <div class="col-md-4"><input type="text" id="newStatNilai" class="form-control" placeholder="Nilai" required></div>
-                                    <div class="col-md-2"><button type="submit" class="btn btn-danger w-100 fw-bold" id="btnTambahStat">Tambah</button></div>
+                                    <div class="col-md-6"><input type="text" id="newStatNama" class="form-control" placeholder="Nama Statistik (Cth: Jumlah Siswa)" required></div>
+                                    <div class="col-md-4"><input type="text" id="newStatNilai" class="form-control" placeholder="Nilai (Cth: 120)" required></div>
+                                    <div class="col-md-2"><button type="submit" class="btn btn-3d btn-3d-danger w-100">Tambah</button></div>
                                 </div>
                             </form>
                         </div>
 
+                        <!-- Tab Dana BOS -->
                         <div class="tab-pane fade" id="tab-bos">
                             <form id="formBosConfig">
                                 <div class="row g-2 mb-3">
@@ -438,604 +933,1104 @@
                                     <div class="col-md-6"><label class="form-label small mb-1">8. Pembiayaan</label><input type="number" class="form-control bos-input" id="bosPembiayaanIn"></div>
                                 </div>
                                 <div class="bg-dark text-white p-2 rounded mb-3 text-end fw-bold">TOTAL: <span id="bosTotalPreview" class="text-warning">Rp 0</span></div>
-                                <button type="submit" class="btn btn-danger w-100 fw-bold" id="btnSubmitBosConfig">Simpan Data Dana BOS</button>
+                                <button type="submit" class="btn btn-3d btn-3d-danger w-100 py-2">Simpan Data Dana BOS</button>
                             </form>
                         </div>
 
+                        <!-- Tab Konfigurasi & Operator -->
                         <div class="tab-pane fade" id="tab-config">
-                            <div class="mb-4 p-3 bg-white border border-danger rounded shadow-sm">
-                                <h6 class="text-danger fw-bold mb-3 border-bottom pb-2"><i class="fas fa-user-lock me-2"></i>Ubah Username & Password Admin</h6>
-                                <form id="formChangeAccount">
-                                    <div class="mb-3">
-                                        <label class="form-label fw-semibold small">Password Lama <span class="text-danger">*</span></label>
-                                        <input type="password" class="form-control" id="oldPassIn" required placeholder="Masukkan password saat ini untuk verifikasi">
-                                    </div>
-                                    <div class="row g-2 mb-3">
-                                        <div class="col-md-6">
-                                            <label class="form-label fw-semibold small">Username Baru <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control" id="newUserIn" required placeholder="Username baru">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="form-label fw-semibold small">Password Baru <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control" id="newPassIn" required placeholder="Ketik password baru">
-                                        </div>
-                                    </div>
-                                    <button type="submit" class="btn btn-danger w-100 fw-bold" id="btnSubmitAccount">Simpan & Logout Otomatis</button>
+                            <div class="mb-4 p-3 bg-white border border-danger rounded-4 shadow-sm">
+                                <h6 class="text-danger fw-bold mb-3 border-bottom pb-2"><i class="fas fa-users-cog me-2"></i>Kelola Akun Operator / Guru (Tabel Supabase)</h6>
+                                <form id="formAddOperator" class="row g-2 mb-3">
+                                    <div class="col-md-4"><input type="text" id="newOpNama" class="form-control form-control-sm" placeholder="Nama Lengkap" required></div>
+                                    <div class="col-md-3"><input type="text" id="newOpUser" class="form-control form-control-sm" placeholder="Username" required></div>
+                                    <div class="col-md-3"><input type="text" id="newOpPass" class="form-control form-control-sm" placeholder="Password" required></div>
+                                    <div class="col-md-2"><button type="submit" class="btn btn-sm btn-3d btn-3d-danger w-100">Tambah</button></div>
                                 </form>
-                            </div>
-                            <div class="mb-4 p-3 bg-white border rounded shadow-sm">
-                                <label class="form-label fw-bold text-danger mb-2">Ganti Logo Sekolah</label>
-                                <input type="file" id="logoFile" class="form-control" accept="image/*" onchange="handleLogoUpload(this)">
-                                <div id="logoLoading" class="text-danger mt-2 d-none spinner-border spinner-border-sm"></div>
-                                <small class="text-muted d-block mt-1">Logo akan langsung terganti saat file dipilih.</small>
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-bordered small mb-0">
+                                        <thead class="table-light"><tr><th>Nama</th><th>Username</th><th>Aksi</th></tr></thead>
+                                        <tbody id="operatorListBody"></tbody>
+                                    </table>
+                                </div>
                             </div>
 
-                            <div class="mb-4 p-3 bg-white border rounded shadow-sm">
-                                <label class="form-label fw-bold text-danger mb-2">Kelola Gambar Latar Depan (Hero)</label>
-                                <div id="adminHeroList" class="row g-2 mt-1">
-                                    <div class="col-12 text-muted small"><div class="spinner-border spinner-border-sm text-danger"></div> Memuat gambar...</div>
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-6">
+                                    <div class="p-3 bg-white border rounded-4 shadow-sm">
+                                        <label class="form-label fw-bold text-danger mb-2">Ganti Logo Sekolah</label>
+                                        <input type="file" class="form-control" accept="image/*" onchange="handleLogoUpload(this)">
+                                    </div>
                                 </div>
-                                <small class="text-muted d-block mt-2">Gambar yang dihapus akan langsung hilang dari slider halaman depan.</small>
+                                <div class="col-md-6">
+                                    <div class="p-3 bg-white border rounded-4 shadow-sm">
+                                        <label class="form-label fw-bold text-danger mb-2">Kelola Gambar Latar Depan (Hero)</label>
+                                        <div id="adminHeroList" class="row g-2 mt-1"></div>
+                                    </div>
+                                </div>
                             </div>
+
                             <form id="formConfig">
-                                <h6 class="text-danger fw-bold mb-3 border-bottom pb-2">Link Aplikasi Eksternal</h6>
-                                <div class="mb-3"><label class="form-label fw-semibold">Link Formulir SPMB</label><input type="text" class="form-control" id="urlSpmbIn"></div>
-                                <div class="mb-4"><label class="form-label fw-semibold">Link Buku Tamu</label><input type="text" class="form-control" id="urlBukuTamuIn"></div>
-                                
-                                <h6 class="text-danger fw-bold mb-3 border-bottom pb-2">Alamat, WhatsApp & Medsos</h6>
-                                <div class="mb-3"><label class="form-label fw-semibold">Alamat Sekolah</label><input type="text" class="form-control" id="alamatIn"></div>
-                                <div class="mb-3"><label class="form-label fw-semibold"><i class="fab fa-whatsapp text-success me-1"></i>Nomor WhatsApp (Cth: 08123...)</label><input type="text" class="form-control" id="waIn" placeholder="Awali dengan 08 / 62 tanpa spasi/simbol"></div>
-                                
-                                <div class="row g-2 mb-3">
-                                    <div class="col-6"><label class="form-label fw-semibold"><i class="fab fa-youtube text-danger me-1"></i>URL YouTube</label><input type="text" class="form-control" id="ytIn"></div>
-                                    <div class="col-6"><label class="form-label fw-semibold"><i class="fab fa-tiktok text-dark me-1"></i>URL TikTok</label><input type="text" class="form-control" id="tiktokIn"></div>
-                                    <div class="col-6"><label class="form-label fw-semibold"><i class="fab fa-instagram text-danger me-1"></i>URL Instagram</label><input type="text" class="form-control" id="instaIn"></div>
-                                    <div class="col-6"><label class="form-label fw-semibold"><i class="fab fa-facebook text-primary me-1"></i>URL Facebook</label><input type="text" class="form-control" id="fbIn"></div>
-                                    <div class="col-6"><label class="form-label fw-semibold"><i class="fab fa-x-twitter text-dark me-1"></i>URL X (Twitter)</label><input type="text" class="form-control" id="xIn"></div>
+                                <h6 class="text-danger fw-bold mb-3 border-bottom pb-2">Link Aplikasi Utama</h6>
+                                <div class="row g-2 mb-4">
+                                    <div class="col-md-6"><label class="form-label fw-semibold">Link Formulir SPMB</label><input type="text" class="form-control" id="urlSpmbIn"></div>
+                                    <div class="col-md-6"><label class="form-label fw-semibold">Link Buku Tamu Eksternal (Kosongkan jika pakai Popup Internal)</label><input type="text" class="form-control" id="urlBukuTamuIn"></div>
                                 </div>
-                                <button type="submit" class="btn btn-danger w-100 fw-bold" id="btnSubmitConfig">Simpan Pengaturan Teks & Link</button>
+                                <h6 class="text-danger fw-bold mb-3 border-bottom pb-2">Identitas Footer, Kontak & Medsos</h6>
+                                <div class="mb-3"><label class="form-label fw-semibold">Deskripsi Singkat Footer</label><textarea class="form-control" id="deskripsiFooterIn" rows="2"></textarea></div>
+                                <div class="mb-3"><label class="form-label fw-semibold">Alamat Sekolah</label><input type="text" class="form-control" id="alamatIn"></div>
+                                <div class="row g-2 mb-3">
+                                    <div class="col-md-4"><label class="form-label fw-semibold">No. WhatsApp</label><input type="text" class="form-control" id="waIn"></div>
+                                    <div class="col-md-4"><label class="form-label fw-semibold">Telepon Sekolah</label><input type="text" class="form-control" id="teleponIn"></div>
+                                    <div class="col-md-4"><label class="form-label fw-semibold">Email Sekolah</label><input type="email" class="form-control" id="emailIn"></div>
+                                </div>
+                                <div class="row g-2 mb-3">
+                                    <div class="col-md-6"><label class="form-label fw-semibold">URL YouTube</label><input type="text" class="form-control" id="ytIn"></div>
+                                    <div class="col-md-6"><label class="form-label fw-semibold">URL TikTok</label><input type="text" class="form-control" id="tiktokIn"></div>
+                                    <div class="col-md-4"><label class="form-label fw-semibold">URL Instagram</label><input type="text" class="form-control" id="instaIn"></div>
+                                    <div class="col-md-4"><label class="form-label fw-semibold">URL Facebook</label><input type="text" class="form-control" id="fbIn"></div>
+                                    <div class="col-md-4"><label class="form-label fw-semibold">URL X (Twitter)</label><input type="text" class="form-control" id="xIn"></div>
+                                </div>
+                                <button type="submit" class="btn btn-3d btn-3d-danger w-100 py-2">Simpan Pengaturan Teks & Link</button>
                             </form>
                         </div>
-
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // ==============================================================
-        // MASUKKAN URL GOOGLE APPS SCRIPT DI SINI
-        const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzbNStBu29VGu-80K3O2RIZgFvBu1KSbKVsa7K_m_nOgogTrgiUMtTH893l7hmiWYYC9g/exec";
-        // ==============================================================
+</div>
 
-        let globalBeritaData = []; 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-        window.onload = () => { if(sessionStorage.getItem('isAdmin') === 'true') toggleAdminState(true); loadWebsiteData(); };
-        
-        function fixGoogleDriveLink(url) {
-            if (!url) return "";
-            let fileId = "";
-            if (url.includes("/file/d/")) { fileId = url.split("/file/d/")[1].split("/")[0]; } 
-            else if (url.includes("id=")) { fileId = url.split("id=")[1].split("&")[0]; }
-            return fileId ? `https://drive.google.com/thumbnail?id=${fileId}&sz=w1600` : url;
+    // ============================================================================
+    // KONFIGURASI APLIKASI
+    // ============================================================================
+    const IS_PREVIEW = false; // Ubah menjadi false SAAT DEPLOY agar mode preview & data dummy hilang dan terhubung 100% ke Supabase
+    const SUPABASE_URL = "https://okzmoletfddizexohylp.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9rem1vbGV0ZmRkaXpleG9oeWxwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQwNzcxNjUsImV4cCI6MjEwOTY1MzE2NX0.VnuxNAo2qpkv7kBqmhiRIr5yPvI-eJqKgW_YFGB2BBI";
+
+    const supabase = !IS_PREVIEW ? createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+
+    if ('serviceWorker' in navigator) {
+        const blob = new Blob([`self.addEventListener('fetch', function(e){});`], { type: 'application/javascript' });
+        navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(() => {});
+    }
+
+    // ============================================================================
+    // KATALOG LENGKAP 108 IKON APLIKASI SEKOLAH (DIKELOMPOKKAN PER KATEGORI)
+    // ============================================================================
+    const ICON_CATALOG = {
+        akademik: [
+            'fa-book-open', 'fa-graduation-cap', 'fa-school', 'fa-chalkboard-teacher', 'fa-chalkboard',
+            'fa-book', 'fa-book-reader', 'fa-atlas', 'fa-swatchbook', 'fa-bookmark',
+            'fa-spell-check', 'fa-pen-nib', 'fa-pencil-alt', 'fa-highlighter', 'fa-microscope',
+            'fa-flask', 'fa-atom', 'fa-Calculator', 'fa-globe-asia', 'fa-language'
+        ],
+        data: [
+            'fa-database', 'fa-server', 'fa-laptop-code', 'fa-desktop', 'fa-laptop',
+            'fa-tablet-alt', 'fa-mobile-alt', 'fa-network-wired', 'fa-cloud', 'fa-cloud-upload-alt',
+            'fa-cloud-download-alt', 'fa-chart-bar', 'fa-chart-pie', 'fa-chart-line', 'fa-qrcode',
+            'fa-barcode', 'fa-wifi', 'fa-cogs', 'fa-sliders-h', 'fa-shield-alt'
+        ],
+        keuangan: [
+            'fa-coins', 'fa-money-bill-wave', 'fa-wallet', 'fa-file-invoice-dollar', 'fa-hand-holding-usd',
+            'fa-piggy-bank', 'fa-credit-card', 'fa-receipt', 'fa-donate', 'fa-balance-scale',
+            'fa-calculator', 'fa-percent', 'fa-chart-area', 'fa-Tags', 'fa-hand-holding-heart'
+        ],
+        warga: [
+            'fa-users', 'fa-user-graduate', 'fa-user-tie', 'fa-user-check', 'fa-user-plus',
+            'fa-user-cog', 'fa-users-cog', 'fa-user-shield', 'fa-id-card', 'fa-id-badge',
+            'fa-address-book', 'fa-address-card', 'fa-child', 'fa-female', 'fa-male',
+            'fa-people-arrows', 'fa-hands-helping', 'fa-user-clock', 'fa-user-edit', 'fa-fingerprint'
+        ],
+        sarpras: [
+            'fa-building', 'fa-home', 'fa-warehouse', 'fa-door-open', 'fa-chair',
+            'fa-briefcase-medical', 'fa-heartbeat', 'fa-hospital', 'fa-first-aid', 'fa-stethoscope',
+            'fa-mosque', 'fa-place-of-worship', 'fa-restroom', 'fa-Faucet', 'fa-tree',
+            'fa-seedling', 'fa-recycle', 'fa-bus', 'fa-bicycle', 'fa-map-marked-alt'
+        ],
+        dokumen: [
+            'fa-file-alt', 'fa-file-signature', 'fa-file-pdf', 'fa-file-word', 'fa-file-excel',
+            'fa-folder-open', 'fa-folder-plus', 'fa-archive', 'fa-clipboard-list', 'fa-clipboard-check',
+            'fa-calendar-alt', 'fa-calendar-check', 'fa-calendar-day', 'fa-clock', 'fa-bell',
+            'fa-envelope', 'fa-envelope-open-text', 'fa-paper-plane', 'fa-inbox', 'fa-print'
+        ],
+        media: [
+            'fa-link', 'fa-external-link-alt', 'fa-globe', 'fa-compass', 'fa-bullhorn',
+            'fa-trophy', 'fa-medal', 'fa-award', 'fa-star', 'fa-crown',
+            'fa-certificate', 'fa-images', 'fa-camera', 'fa-video', 'fa-music',
+            'fa-futbol', 'fa-basketball-ball', 'fa-running', 'fa-paint-brush', 'fa-comments'
+        ]
+    };
+
+    let autoRecommendedIcons = ['fa-link', 'fa-globe', 'fa-book-open', 'fa-database', 'fa-user-check', 'fa-coins'];
+
+    // State Global
+    let state = { settings: {}, berita: [], statistik: [], apps: [], galeri: [], heroBgs: [], bukuTamu: [], operators: [] };
+    let heroInterval = null;
+    let sliderIntervals = {};
+
+    // Data Dummy Minimalis (Hanya 1-2 baris saat IS_PREVIEW = true)
+    const PREVIEW_STATE = {
+        settings: {
+            Logo_Sekolah: "https://i.ibb.co.com/5xhN0cm1/Logo-Donggala.png",
+            Judul_Hero: "SDN 27 BANAWA SELATAN",
+            Subjudul_Hero: "DINAS PENDIDIKAN PEMUDA DAN OLAHRAGA KAB. DONGGALA",
+            Nama_Kepala_Sekolah: "Kepala SDN 27 BANAWA SELATAN, S.Pd.",
+            URL_Video_KS: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+            Sambutan_Kepala_Sekolah: "VISI SEKOLAH:\nTerwujudnya Peserta Didik yang Beriman, Cerdas, Terampil, dan Mandiri.\n\nMISI SEKOLAH:\n1. Meningkatkan mutu pembelajaran berbasis teknologi.\n2. Menumbuhkan budaya literasi dan disiplin positif.",
+            Bos_SKL: "12500000", Bos_Isi: "8000000", Bos_Proses: "24000000", Bos_Penilaian: "9500000",
+            Bos_PTK: "15000000", Bos_Sarpras: "18000000", Bos_Pengelolaan: "11000000", Bos_Pembiayaan: "7000000",
+            Alamat_Sekolah: "Kec. Pinembani, Kabupaten Donggala, Sulawesi Tengah",
+            No_WhatsApp: "081234567890", Telepon_Sekolah: "-", Email_Sekolah: "sdn8pinembani@gmail.com",
+            URL_SPMB: "https://spmb.donggalakab.go.id", URL_Buku_Tamu: ""
+        },
+        berita: [
+            { id: "brt-1", tanggal: "2026-11-01", judul: "Kegiatan Literasi & Asesmen Nasional SDN 27 BANAWA SELATAN", konten: "Pelaksanaan kegiatan peningkatan mutu pendidikan berjalan lancar dengan dukungan penuh para guru.", images: ["https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&q=80"] }
+        ],
+        statistik: [
+            { id: "st-1", nama: "Jumlah Siswa", nilai: "124", icon: "fa-users" },
+            { id: "st-2", nama: "Guru & Tendik", nilai: "14", icon: "fa-user-tie" }
+        ],
+        apps: [
+            { id: "ap-1", nama: "Portal Dapodik", url: "https://dapo.kemdikbud.go.id", icon: "fa-database" },
+            { id: "ap-2", nama: "E-Rapor SD", url: "https://kemdikbud.go.id", icon: "fa-book-open" }
+        ],
+        galeri: [
+            { id: "gl-1", judul: "Upacara Bendera", image_url: "https://images.unsplash.com/photo-1577896851231-70ef18881754?w=800&q=80" }
+        ],
+        heroBgs: [
+            { id: "hb-1", nama: "Gedung Utama", image_url: "https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=1600&q=80" }
+        ],
+        bukuTamu: [
+            { id: "bt-1", nama: "Budi Santoso", instansi: "Disdikpora Donggala", no_hp: "0812345678", keperluan: "Monitoring Sekolah", created_at: "2026-11-05" }
+        ],
+        operators: [
+            { id: "op-1", username: "operator", password: "123", nama_lengkap: "Operator Sekolah" }
+        ]
+    };
+
+    window.addEventListener('DOMContentLoaded', async () => {
+        if (IS_PREVIEW) {
+            document.getElementById('previewBanner').classList.remove('d-none');
+            const saved = sessionStorage.getItem('sdn8_preview_v3');
+            state = saved ? JSON.parse(saved) : structuredClone(PREVIEW_STATE);
+        } else {
+            document.getElementById('previewBanner').remove();
+            const { data: sData } = await supabase.auth.getSession();
+            if (sData?.session) toggleAdminUI(true);
         }
 
-        function getYouTubeEmbedUrl(url) {
-            if (!url) return "";
-            let videoId = "";
-            try {
-                if (url.includes("youtube.com/shorts/")) { videoId = url.split("shorts/")[1].split("?")[0]; } 
-                else if (url.includes("youtu.be/")) { videoId = url.split("youtu.be/")[1].split("?")[0]; } 
-                else if (url.includes("watch?v=")) { videoId = url.split("watch?v=")[1].split("&")[0]; } 
-                else if (url.includes("embed/")) { videoId = url.split("embed/")[1].split("?")[0]; } 
-                else {
-                    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=|shorts\/)([^#&?]*).*/;
-                    const match = url.match(regExp);
-                    if (match && match[2].length === 11) { videoId = match[2]; }
-                }
-                videoId = videoId.replace(/[^a-zA-Z0-9_-]/g, '').substring(0, 11);
-                if (videoId && videoId.length === 11) { return `https://www.youtube-nocookie.com/embed/${videoId}?rel=0&modestbranding=1`; }
-            } catch (e) { console.error("Gagal memproses URL", e); }
-            return "";
+        if (sessionStorage.getItem('isAdmin') === 'true') toggleAdminUI(true);
+        renderIconCatalog();
+        await loadWebsiteData();
+    });
+
+    function savePreview() {
+        if (IS_PREVIEW) sessionStorage.setItem('sdn8_preview_v3', JSON.stringify(state));
+    }
+
+    async function loadWebsiteData() {
+        if (IS_PREVIEW) {
+            renderWebsiteData();
+            return;
+        }
+        try {
+            const [setRes, brtRes, statRes, appRes, galRes, heroRes, btRes, opRes] = await Promise.all([
+                supabase.from('site_settings').select('*'),
+                supabase.from('berita').select('*').order('created_at', { ascending: false }),
+                supabase.from('statistik').select('*').order('urutan', { ascending: true }),
+                supabase.from('aplikasi').select('*').order('urutan', { ascending: true }),
+                supabase.from('galeri').select('*').order('created_at', { ascending: false }),
+                supabase.from('hero_slides').select('*').order('created_at', { ascending: true }),
+                supabase.from('buku_tamu').select('*').order('created_at', { ascending: false }).limit(20),
+                supabase.from('operators').select('id, username, nama_lengkap')
+            ]);
+
+            const sMap = {};
+            (setRes.data || []).forEach(r => sMap[r.key] = r.value);
+            state.settings = sMap;
+            state.berita = brtRes.data || [];
+            state.statistik = statRes.data || [];
+            state.apps = appRes.data || [];
+            state.galeri = galRes.data || [];
+            state.heroBgs = heroRes.data || [];
+            state.bukuTamu = btRes.data || [];
+            state.operators = opRes.data || [];
+
+            renderWebsiteData();
+        } catch (err) {
+            console.error("Gagal memuat data:", err);
+        }
+    }
+
+    function renderWebsiteData() {
+        const s = state.settings || {};
+        const defaultLogo = 'https://i.ibb.co.com/5xhN0cm1/Logo-Donggala.png';
+        const logoUrl = s.Logo_Sekolah || defaultLogo;
+        document.getElementById('navLogo').src = logoUrl;
+        document.getElementById('footerLogo').src = logoUrl;
+
+        const linkSpmb = s.URL_SPMB && s.URL_SPMB.trim() !== "" ? s.URL_SPMB : "javascript:alert('Link SPMB belum diatur oleh admin!');";
+        document.getElementById('navSpmbLink').href = linkSpmb;
+        document.getElementById('mobileNavSpmbLink').href = linkSpmb;
+        document.getElementById('heroTombol').href = linkSpmb;
+
+        const extBt = document.getElementById('btnExtBukuTamu');
+        if (s.URL_Buku_Tamu && s.URL_Buku_Tamu.trim() !== "") {
+            extBt.href = s.URL_Buku_Tamu;
+            extBt.classList.remove('d-none');
+        } else {
+            extBt.classList.add('d-none');
         }
 
-        function formatRupiah(angka) { return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(angka); }
-        function formatDateID(dateString) { try { const d = new Date(dateString); if(!isNaN(d)) return d.toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'}); } catch(e) {} return dateString; }
-        function checkLink(link) { return link && link.trim() !== "" ? link : "javascript:alert('Link aplikasi belum diatur oleh admin!');"; }
+        const judulSekolah = s.Judul_Hero || "SDN 27 BANAWA SELATAN";
+        document.getElementById('heroJudul').textContent = judulSekolah;
+        document.getElementById('navBrandText').textContent = judulSekolah;
+        document.getElementById('footerJudulSekolah').textContent = judulSekolah;
+        document.getElementById('heroSubjudul').textContent = s.Subjudul_Hero || "DINAS PENDIDIKAN PEMUDA DAN OLAHRAGA KAB. DONGGALA";
 
-        function initSlider(wrapperId, scrollStep) {
-            const wrapper = document.getElementById(wrapperId);
-            if (!wrapper) return;
-            const slider = wrapper.querySelector('.custom-slider');
-            const btnPrev = wrapper.querySelector('.prev');
-            const btnNext = wrapper.querySelector('.next');
-            
-            btnNext.onclick = () => slider.scrollBy({ left: scrollStep, behavior: 'smooth' });
-            btnPrev.onclick = () => slider.scrollBy({ left: -scrollStep, behavior: 'smooth' });
+        // Hero Slider
+        const heroSlider = document.getElementById('heroSlider');
+        heroSlider.innerHTML = "";
+        if (heroInterval) clearInterval(heroInterval);
 
-            let autoPlay = setInterval(() => {
-                if (slider.scrollLeft + slider.clientWidth >= slider.scrollWidth - 10) { slider.scrollTo({ left: 0, behavior: 'smooth' }); } 
-                else { slider.scrollBy({ left: scrollStep, behavior: 'smooth' }); }
-            }, 3000);
+        const bgUrls = state.heroBgs.length > 0
+            ? state.heroBgs.map(g => g.image_url)
+            : ['https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=1600&q=80'];
 
-            wrapper.onmouseenter = () => clearInterval(autoPlay);
-            wrapper.onmouseleave = () => {
-                autoPlay = setInterval(() => {
-                    if (slider.scrollLeft + slider.clientWidth >= slider.scrollWidth - 10) { slider.scrollTo({ left: 0, behavior: 'smooth' }); } 
-                    else { slider.scrollBy({ left: scrollStep, behavior: 'smooth' }); }
-                }, 3000);
-            };
+        const slides = bgUrls.map((bg, index) => {
+            const slide = document.createElement('div');
+            slide.className = 'hero-slide';
+            slide.style.backgroundImage = `url('${bg}')`;
+            slide.style.transform = index === 0 ? 'translateX(0)' : 'translateX(-100%)';
+            heroSlider.appendChild(slide);
+            return slide;
+        });
+
+        if (slides.length > 1) {
+            let currentIndex = 0;
+            heroInterval = setInterval(() => {
+                let nextIndex = (currentIndex + 1) % slides.length;
+                slides[nextIndex].style.transition = 'none';
+                slides[nextIndex].style.transform = 'translateX(-100%)';
+                void slides[nextIndex].offsetWidth;
+                slides[nextIndex].style.transition = 'transform 1.5s ease-in-out';
+                slides[currentIndex].style.transition = 'transform 1.5s ease-in-out';
+                slides[nextIndex].style.transform = 'translateX(0)';
+                slides[currentIndex].style.transform = 'translateX(100%)';
+                currentIndex = nextIndex;
+            }, 6000);
         }
 
-        function toggleVisiMisi() {
-            const wrapper = document.getElementById('ksSambutanWrapper');
-            const btn = document.getElementById('btnSelengkapnya');
-            const fade = document.getElementById('visiMisiFade');
-            wrapper.classList.toggle('expanded');
-            if (wrapper.classList.contains('expanded')) {
-                btn.innerHTML = 'Tutup <i class="fas fa-chevron-up ms-1"></i>';
-                fade.classList.add('hidden');
-            } else {
-                btn.innerHTML = 'Selengkapnya <i class="fas fa-chevron-down ms-1"></i>';
-                fade.classList.remove('hidden');
-            }
+        if (s.BG_Dana_BOS) {
+            document.getElementById('danabos').style.backgroundImage = `url('${s.BG_Dana_BOS}')`;
         }
 
-        function loadWebsiteData() {
-            fetch(GAS_WEB_APP_URL, { method: 'POST', mode: 'cors', body: JSON.stringify({ action: "get_data" }) })
-            .then(res => res.json()).then(data => {
-                const s = data.settings || {};
-                globalBeritaData = data.berita || []; 
-                
-                const logoUrl = s.Logo_Sekolah ? fixGoogleDriveLink(s.Logo_Sekolah) : 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Lambang_Kabupaten_Donggala.png/400px-Lambang_Kabupaten_Donggala.png';
-                const navLogo = document.getElementById('navLogo');
-                if (navLogo) { navLogo.src = logoUrl; navLogo.classList.remove('d-none'); document.getElementById('navIcon').classList.add('d-none'); }
-                const footerLogo = document.getElementById('footerLogo');
-                if (footerLogo) footerLogo.src = logoUrl;
-
-                const linkSpmb = checkLink(s.URL_SPMB); const linkBukuTamu = checkLink(s.URL_Buku_Tamu);
-                document.getElementById('navSpmbLink').href = linkSpmb; document.getElementById('mobileNavSpmbLink').href = linkSpmb; document.getElementById('heroTombol').href = linkSpmb;
-                document.getElementById('navBukuTamuLink').href = linkBukuTamu; document.getElementById('mobileNavBukuTamuLink').href = linkBukuTamu;
-                
-                document.getElementById('heroJudul').textContent = s.Judul_Hero || "SDN 27 BANAWA SELATAN";
-                document.getElementById('heroSubjudul').textContent = s.Subjudul_Hero || "DINAS PENDIDIKAN PEMUDA DAN OLAHRAGA KAB.DONGGALA";
-                
-                const heroSlider = document.getElementById('heroSlider');
-                if (data.heroBgs && data.heroBgs.length > 0) {
-                    const safeHeroBgs = data.heroBgs.map(g => fixGoogleDriveLink(g[2]));
-                    const slides = safeHeroBgs.map((bg, index) => {
-                        const slide = document.createElement('div'); slide.className = 'hero-slide'; slide.style.backgroundImage = `url('${bg}')`;
-                        slide.style.transform = index === 0 ? 'translateX(0)' : 'translateX(-100%)';
-                        heroSlider.appendChild(slide); return slide;
-                    });
-                    if (slides.length > 1) {
-                        let currentIndex = 0;
-                        setInterval(() => {
-                            let nextIndex = (currentIndex + 1) % slides.length;
-                            slides[nextIndex].style.transition = 'none'; slides[nextIndex].style.transform = 'translateX(-100%)';
-                            void slides[nextIndex].offsetWidth;
-                            slides[nextIndex].style.transition = 'transform 1.5s ease-in-out'; slides[currentIndex].style.transition = 'transform 1.5s ease-in-out';
-                            slides[nextIndex].style.transform = 'translateX(0)'; slides[currentIndex].style.transform = 'translateX(100%)';
-                            currentIndex = nextIndex;
-                        }, 6000); 
-                    }
-                } else {
-                    const slide = document.createElement('div'); slide.className = 'hero-slide'; slide.style.backgroundImage = `url('https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=1600&q=80&fit=crop')`; slide.style.transform = 'translateX(0)'; heroSlider.appendChild(slide);
-                }
-
-                // Render list Hero BG di panel Admin
-                const adminHeroList = document.getElementById('adminHeroList');
-                if (adminHeroList) {
-                    if (data.heroBgs && data.heroBgs.length > 0) {
-                        adminHeroList.innerHTML = data.heroBgs.map(bg => `
-                            <div class="col-4 col-md-3">
-                                <div class="position-relative shadow-sm rounded overflow-hidden border">
-                                    <img src="${fixGoogleDriveLink(bg[2])}" class="w-100" style="height: 70px; object-fit: cover;">
-                                    <button class="btn btn-danger btn-sm position-absolute top-0 end-0 m-1" style="padding: 0px 6px;" onclick="hapusHeroBg('${bg[0]}')" title="Hapus Gambar">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        `).join('');
-                    } else {
-                        adminHeroList.innerHTML = '<div class="col-12 text-muted small">Belum ada gambar custom (masih menggunakan gambar bawaan).</div>';
-                    }
-                }
-
-                if (s.BG_Dana_BOS) { document.getElementById('danabos').style.backgroundImage = `url('${fixGoogleDriveLink(s.BG_Dana_BOS)}')`; }
-
-                document.getElementById('beritaContainer').innerHTML = data.berita && data.berita.length > 0 ? data.berita.map(b => {
-                    const thumbnail = b[4] ? fixGoogleDriveLink(b[4].split("||")[0]) : 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&q=80&fit=crop';
-                    return `<div class="slide-item news"><div class="card news-card shadow-sm h-100" onclick="showBeritaDetail('${b[0]}')"><img src="${thumbnail}" class="card-img-top" style="height: 200px; object-fit: cover;"><div class="card-body"><small class="text-danger fw-bold"><i class="far fa-calendar-alt me-1"></i>${formatDateID(b[1])}</small><h5 class="card-title fw-bold mt-2" style="font-size:1.1rem;">${b[2]}</h5><p class="card-text text-muted small news-content-preview">${b[3]}</p><button class="btn btn-sm btn-outline-danger admin-panel mt-2" onclick="event.stopPropagation(); hapusBerita('${b[0]}')"><i class="fas fa-trash me-1"></i>Hapus</button></div></div></div>`;
-                }).join('') : '<p class="text-muted text-center w-100 mt-2">Belum ada berita yang dipublikasikan.</p>';
-                
-                if (data.berita && data.berita.length > 1) initSlider('beritaWrapper', 340);
-                
-                const ytEmbed = getYouTubeEmbedUrl(s.URL_Video_KS);
-                const videoIframe = document.getElementById('ksVideo');
-                const videoWrapper = document.getElementById('videoWrapper');
-                
-                if (ytEmbed) {
-                    videoIframe.src = ytEmbed;
-                    videoIframe.classList.remove('d-none');
-                    const placeholder = document.getElementById('ytPlaceholder');
-                    if(placeholder) placeholder.remove();
-                } else {
-                    videoIframe.classList.add('d-none');
-                    if (!document.getElementById('ytPlaceholder')) {
-                        const placeholder = document.createElement('div');
-                        placeholder.id = 'ytPlaceholder';
-                        placeholder.className = 'd-flex flex-column align-items-center justify-content-center bg-secondary text-white w-100 h-100 position-absolute top-0 start-0';
-                        placeholder.innerHTML = '<i class="fas fa-video fa-2x mb-2 opacity-50"></i><small class="opacity-75">Video belum diatur</small>';
-                        videoWrapper.appendChild(placeholder);
-                    }
-                }
-                
-                const visiMisiText = s.Sambutan_Kepala_Sekolah || "Tuliskan Visi dan Misi sekolah melalui menu Pengaturan Admin (@).";
-                document.getElementById('ksSambutan').innerHTML = visiMisiText.replace(/\n/g, '<br>');
-                
-                setTimeout(() => {
-                    const wrap = document.getElementById('ksSambutanWrapper');
-                    const content = document.getElementById('ksSambutan');
-                    if(content.scrollHeight > wrap.clientHeight + 10) {
-                        document.getElementById('btnSelengkapnya').style.display = 'inline-block';
-                        document.getElementById('visiMisiFade').style.display = 'block';
-                    } else {
-                        document.getElementById('visiMisiFade').style.display = 'none';
-                    }
-                }, 500);
-
-                if (data.statistik && data.statistik.length > 0) {
-                    const colors = ['stat-color-0', 'stat-color-1', 'stat-color-2', 'stat-color-3', 'stat-color-4', 'stat-color-5', 'stat-color-6', 'stat-color-7'];
-                    document.getElementById('statContainer').innerHTML = data.statistik.map((st, index) => {
-                        const colorClass = index === 0 ? 'stat-color-0' : colors[index % colors.length];
-                        return `<div class="col-6 col-md-3 col-lg-2"><div class="stat-card ${colorClass}"><i class="fas ${st[3]}"></i><h3>${st[2]}</h3><small>${st[1]}</small></div></div>`;
-                    }).join('');
-                }
-
-                let totalBos = 0;
-                ['SKL', 'Isi', 'Proses', 'Penilaian', 'PTK', 'Sarpras', 'Pengelolaan', 'Pembiayaan'].forEach(k => {
-                    let val = parseInt(s['Bos_'+k]) || 0; totalBos += val; document.getElementById('pub_Bos_'+k).textContent = formatRupiah(val);
-                });
-                document.getElementById('pub_Bos_Total').textContent = formatRupiah(totalBos);
-
-                document.getElementById('footerAlamat').textContent = s.Alamat_Sekolah || "-";
-                [['ytLink', s.URL_YouTube], ['tiktokLink', s.URL_TikTok], ['instaLink', s.URL_Instagram], ['fbLink', s.URL_Facebook], ['xLink', s.URL_X]].forEach(link => { const el = document.getElementById(link[0]); if(link[1]) { el.setAttribute('href', link[1]); el.classList.remove('d-none'); } });
-
-                const waBtn = document.getElementById('waFloatBtn');
-                const footerWaLink = document.getElementById('footerWaLink');
-
-                if (s.No_WhatsApp && String(s.No_WhatsApp).trim() !== "") {
-                    let waNum = String(s.No_WhatsApp).replace(/\D/g, '');
-                    if (waNum.startsWith('08')) {
-                        waNum = '62' + waNum.substring(1);
-                    } else if (waNum.startsWith('8')) {
-                        waNum = '62' + waNum;
-                    }
-                    const waUrl = `https://wa.me/${waNum}`;
-                    if(waBtn) waBtn.href = waUrl;
-                    if(footerWaLink) footerWaLink.href = waUrl;
-                }
-
-                const appsList = (data.apps || []).filter(app => app && app[1] && String(app[1]).trim() !== "");
-                const appColors = ['#dc3545', '#198754', '#0d6efd', '#ffc107', '#0dcaf0', '#6f42c1', '#fd7e14', '#20c997', '#e83e8c', '#6610f2'];
-                document.getElementById('appContainer').innerHTML = appsList.length > 0 ? appsList.map((app, index) => {
-                    const color = appColors[index % appColors.length];
-                    return `
-                    <div class="slide-item app">
-                        <a href="${app[2]}" target="_blank" class="text-decoration-none text-dark d-block">
-                            <div class="app-icon-wrapper mx-auto mb-2 d-flex align-items-center justify-content-center" style="background-color: ${color}15; color: ${color}; width: 70px; height: 70px; border-radius: 22px; box-shadow: 0 4px 10px ${color}25;">
-                                <i class="fas ${app[3]} fa-2x"></i>
-                            </div>
-                            <h6 class="fw-bold small mb-0 px-1 text-wrap" style="line-height: 1.3;">${app[1]}</h6>
-                        </a>
-                        <div class="admin-panel mt-2 text-center">
-                            <button class="btn btn-sm btn-outline-danger mb-1 p-1 px-2" onclick="editApp('${app[0]}', '${app[1]}', '${app[2]}', '${app[3]}')"><i class="fas fa-edit"></i></button>
-                            <button class="btn btn-sm btn-outline-danger mb-1 p-1 px-2" onclick="hapusApp('${app[0]}')"><i class="fas fa-trash"></i></button>
+        // Berita 3D
+        document.getElementById('beritaContainer').innerHTML = state.berita.length > 0 ? state.berita.map(b => {
+            const imgs = Array.isArray(b.images) ? b.images : [];
+            const thumb = imgs[0] || 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&q=80';
+            return `
+            <div class="slide-item news">
+                <div class="card-3d h-100 overflow-hidden" style="cursor:pointer;" onclick="showBeritaDetail('${escapeHtml(b.id)}')">
+                    <img src="${thumb}" class="card-img-top" style="height: 200px; object-fit: cover;" loading="lazy">
+                    <div class="card-body p-3 d-flex flex-column">
+                        <small class="text-danger fw-bold"><i class="far fa-calendar-alt me-1"></i>${escapeHtml(formatDateID(b.tanggal || b.created_at))}</small>
+                        <h5 class="card-title fw-bold mt-2" style="font-size:1.05rem;">${escapeHtml(b.judul)}</h5>
+                        <p class="card-text text-muted small news-content-preview flex-grow-1">${escapeHtml(b.konten)}</p>
+                        <div class="admin-panel mt-2 pt-2 border-top">
+                            <button class="btn btn-sm btn-outline-primary me-1" onclick="event.stopPropagation(); openEditBeritaModal('${escapeHtml(b.id)}')"><i class="fas fa-edit me-1"></i>Edit</button>
+                            <button class="btn btn-sm btn-outline-danger" onclick="event.stopPropagation(); hapusBerita('${escapeHtml(b.id)}')"><i class="fas fa-trash me-1"></i>Hapus</button>
                         </div>
-                    </div>`;
-                }).join('') : '<p class="text-muted w-100 text-center mt-2">Belum ada link layanan.</p>';
+                    </div>
+                </div>
+            </div>`;
+        }).join('') : '<p class="text-muted text-center w-100 mt-2">Belum ada berita yang dipublikasikan.</p>';
+        if (state.berita.length > 1) initSlider('beritaWrapper', 340);
 
-                if (appsList.length > 3) initSlider('appWrapper', 150);
-
-                const galeriList = (data.galeri || []).filter(g => g && g[1] && String(g[1]).trim() !== "");
-                document.getElementById('galeriContainer').innerHTML = galeriList.length > 0 ? galeriList.map(g => `<div class="slide-item galeri"><div class="card shadow-sm border-0 h-100"><img src="${fixGoogleDriveLink(g[2])}" class="card-img-top rounded-top" style="height: 180px; object-fit: cover;"><div class="card-body text-center p-2"><p class="card-text fw-semibold mb-1 small">${g[1]}</p><button class="btn btn-sm btn-outline-danger admin-panel mt-1" onclick="hapusFoto('${g[0]}')"><i class="fas fa-trash me-1"></i>Hapus</button></div></div></div>`).join('') : '<p class="text-muted text-center w-100 mt-2">Belum ada foto.</p>';
-                if (galeriList.length > 2) initSlider('galeriWrapper', 300);
-
-            }).catch(err => console.error("Gagal memuat data:", err));
-        }
-
-        function showBeritaDetail(id) {
-            const b = globalBeritaData.find(item => item[0] === id);
-            if(!b) return;
-            document.getElementById('detailBeritaJudul').textContent = b[2];
-            document.getElementById('detailBeritaTanggal').textContent = formatDateID(b[1]);
-            document.getElementById('detailBeritaKonten').textContent = b[3]; 
-
-            const urls = b[4] ? b[4].split("||") : [];
-            const sliderInner = document.getElementById('detailBeritaSlider');
-            const carousel = document.getElementById('beritaCarousel');
-            
-            if(urls.length > 0) {
-                sliderInner.innerHTML = urls.map((url, idx) => `<div class="carousel-item ${idx === 0 ? 'active' : ''}"><img src="${fixGoogleDriveLink(url)}" class="d-block w-100 rounded" style="height: 400px; object-fit: cover;"></div>`).join('');
-                carousel.style.display = 'block';
-                document.querySelectorAll('#beritaCarousel .carousel-control-prev, #beritaCarousel .carousel-control-next').forEach(c => c.style.display = urls.length > 1 ? 'flex' : 'none');
-            } else { carousel.style.display = 'none'; }
-
-            new bootstrap.Modal(document.getElementById('beritaDetailModal')).show();
-        }
-
-        document.querySelectorAll('.bos-input').forEach(input => {
-            input.addEventListener('input', function() {
-                let total = 0; document.querySelectorAll('.bos-input').forEach(inp => total += (parseInt(inp.value) || 0));
-                document.getElementById('bosTotalPreview').textContent = formatRupiah(total);
-            });
-        });
-
-        function login() {
-            const btn = document.getElementById('btnDoLogin'); btn.innerHTML = "Memeriksa..."; btn.disabled = true;
-            fetch(GAS_WEB_APP_URL, { method: 'POST', mode: 'cors', body: JSON.stringify({ action: "login", user: document.getElementById('username').value, pass: document.getElementById('password').value }) })
-            .then(res => res.json()).then(data => {
-                if(data.status === "success") { sessionStorage.setItem('isAdmin', 'true'); toggleAdminState(true); bootstrap.Modal.getInstance(document.getElementById('loginModal')).hide(); } else alert("Username/Password Salah!");
-            }).finally(() => { btn.innerHTML = "Masuk Sistem"; btn.disabled = false; });
-        }
-
-        function toggleAdminState(status) {
-            document.body.classList.toggle('is-admin', status);
-            const loginGembok = document.getElementById('loginGembok');
-            if(status) {
-                loginGembok.innerHTML = '<i class="fas fa-edit text-danger fs-5"></i>'; 
-                loginGembok.setAttribute('data-bs-target', '#cmsSettingsModal');
-                fetch(GAS_WEB_APP_URL, { method: 'POST', mode: 'cors', body: JSON.stringify({ action: "get_data" }) })
-                .then(res => res.json()).then(data => {
-                    const s = data.settings || {};
-                    
-                    document.getElementById('ksNamaIn').value = s.Nama_Kepala_Sekolah || ""; 
-                    document.getElementById('ksVideoIn').value = s.URL_Video_KS || "";
-                    document.getElementById('ksSambutanIn').value = s.Sambutan_Kepala_Sekolah || "";
-                    
-                    // Set default username input untuk form ganti password
-                    document.getElementById('newUserIn').value = s.Admin_Username || "admin";
-                    
-                    document.getElementById('urlSpmbIn').value = s.URL_SPMB || ""; document.getElementById('urlBukuTamuIn').value = s.URL_Buku_Tamu || "";
-                    if(data.statistik) {
-                        document.getElementById('adminStatContainer').innerHTML = data.statistik.map(st => `
-                            <div class="col-md-6 mb-2">
-                                <div class="input-group input-group-sm">
-                                    <span class="input-group-text w-50 fw-semibold text-truncate"><i class="fas ${st[3]} me-2 text-danger"></i>${st[1]}</span>
-                                    <input type="text" class="form-control stat-val-input fw-bold" data-id="${st[0]}" value="${st[2]}">
-                                    <button class="btn btn-outline-danger" type="button" onclick="hapusStatistik('${st[0]}')"><i class="fas fa-trash"></i></button>
-                                </div>
-                            </div>
-                        `).join('');
-                    }
-                    ['Skl', 'Isi', 'Proses', 'Penilaian', 'Ptk', 'Sarpras', 'Pengelolaan', 'Pembiayaan'].forEach(k => document.getElementById('bos'+k+'In').value = s['Bos_'+(k === 'Ptk' ? 'PTK' : k === 'Skl' ? 'SKL' : k)]);
-                    document.getElementById('bosSklIn').dispatchEvent(new Event('input'));
-                    
-                    document.getElementById('alamatIn').value = s.Alamat_Sekolah || ""; 
-                    document.getElementById('waIn').value = s.No_WhatsApp || ""; 
-                    document.getElementById('ytIn').value = s.URL_YouTube || ""; 
-                    document.getElementById('tiktokIn').value = s.URL_TikTok || ""; 
-                    document.getElementById('instaIn').value = s.URL_Instagram || ""; 
-                    document.getElementById('fbIn').value = s.URL_Facebook || ""; 
-                    document.getElementById('xIn').value = s.URL_X || "";
-                });
-            } else { 
-                loginGembok.innerHTML = '@'; 
-                loginGembok.setAttribute('data-bs-target', '#loginModal'); 
+        // Video & Visi Misi
+        const ytEmbed = getYouTubeEmbedUrl(s.URL_Video_KS);
+        const videoIframe = document.getElementById('ksVideo');
+        const videoWrapper = document.getElementById('videoWrapper');
+        if (ytEmbed) {
+            if (videoIframe.src !== ytEmbed) videoIframe.src = ytEmbed;
+            videoIframe.classList.remove('d-none');
+            const ph = document.getElementById('ytPlaceholder');
+            if (ph) ph.remove();
+        } else {
+            videoIframe.classList.add('d-none');
+            if (!document.getElementById('ytPlaceholder')) {
+                const ph = document.createElement('div');
+                ph.id = 'ytPlaceholder';
+                ph.className = 'd-flex flex-column align-items-center justify-content-center bg-secondary text-white w-100 h-100 position-absolute top-0 start-0';
+                ph.innerHTML = '<i class="fas fa-video fa-2x mb-2 opacity-50"></i><small class="opacity-75">Video belum diatur</small>';
+                videoWrapper.appendChild(ph);
             }
         }
-        function logout() { sessionStorage.removeItem('isAdmin'); toggleAdminState(false); window.location.reload(); }
+        document.getElementById('ksNamaDisplay').textContent = s.Nama_Kepala_Sekolah ? `Kepala Sekolah: ${s.Nama_Kepala_Sekolah}` : "";
+        document.getElementById('ksSambutan').textContent = s.Sambutan_Kepala_Sekolah || "Tuliskan Visi dan Misi sekolah melalui menu Pengaturan Admin (@).";
 
-        // MENGIRIM PERMINTAAN GANTI AKUN ADMIN
-        document.getElementById('formChangeAccount').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const btn = document.getElementById('btnSubmitAccount');
-            const oldPass = document.getElementById('oldPassIn').value;
-            const newUser = document.getElementById('newUserIn').value;
-            const newPass = document.getElementById('newPassIn').value;
-
-            btn.innerHTML = "Memeriksa..."; btn.disabled = true;
-            fetch(GAS_WEB_APP_URL, {
-                method: 'POST', mode: 'cors',
-                body: JSON.stringify({ action: "change_password", oldPass: oldPass, newUser: newUser, newPass: newPass })
-            })
-            .then(res => res.json())
-            .then(data => {
-                if(data.status === "success") {
-                    alert("Akun berhasil diperbarui! Silakan login kembali dengan data yang baru.");
-                    logout();
-                } else {
-                    alert("Gagal: " + data.message);
-                    btn.innerHTML = "Simpan & Logout Otomatis"; btn.disabled = false;
-                }
-            }).catch(err => {
-                alert("Terjadi kesalahan jaringan.");
-                btn.innerHTML = "Simpan & Logout Otomatis"; btn.disabled = false;
-            });
-        });
-
-        function handleConfigSubmit(e, btnId, dataMap) {
-            e.preventDefault(); const btn = document.getElementById(btnId); btn.innerHTML = "Menyimpan..."; btn.disabled = true;
-            Promise.all(dataMap.map(cfg => fetch(GAS_WEB_APP_URL, { method: 'POST', mode: 'cors', body: JSON.stringify({ action: "update_config", key: cfg[0], value: cfg[1] }) })))
-            .then(() => window.location.reload()).finally(() => { btn.innerHTML = "Simpan"; btn.disabled = false; });
-        }
-        
-        document.getElementById('formKSConfig').addEventListener('submit', function(e) { 
-            handleConfigSubmit(e, 'btnSubmitKSConfig', [
-                ['Nama_Kepala_Sekolah', document.getElementById('ksNamaIn').value], 
-                ['URL_Video_KS', document.getElementById('ksVideoIn').value],
-                ['Sambutan_Kepala_Sekolah', document.getElementById('ksSambutanIn').value]
-            ]); 
-        });
-
-        document.getElementById('formUpdateStat').addEventListener('submit', function(e) {
-            e.preventDefault(); const btn = document.getElementById('btnUpdateStat'); btn.innerHTML = "Menyimpan..."; btn.disabled = true;
-            const inputs = document.querySelectorAll('.stat-val-input'); const updates = Array.from(inputs).map(inp => ({id: inp.getAttribute('data-id'), nilai: inp.value}));
-            fetch(GAS_WEB_APP_URL, { method: 'POST', mode: 'cors', body: JSON.stringify({ action: "update_stat_values", data: updates }) }).then(() => window.location.reload());
-        });
-        document.getElementById('formTambahStat').addEventListener('submit', function(e) {
-            e.preventDefault(); const btn = document.getElementById('btnTambahStat'); btn.innerHTML = "..."; btn.disabled = true;
-            fetch(GAS_WEB_APP_URL, { method: 'POST', mode: 'cors', body: JSON.stringify({ action: "tambah_stat", nama: document.getElementById('newStatNama').value, nilai: document.getElementById('newStatNilai').value, icon: generateStatIcon(document.getElementById('newStatNama').value) }) }).then(() => window.location.reload());
-        });
-        function hapusStatistik(id) { if(confirm("Hapus kartu statistik ini permanen?")) { fetch(GAS_WEB_APP_URL, { method: 'POST', mode: 'cors', body: JSON.stringify({ action: "hapus_stat", id: id }) }).then(() => window.location.reload()); } }
-        document.getElementById('formBosConfig').addEventListener('submit', function(e) { handleConfigSubmit(e, 'btnSubmitBosConfig', [['Bos_SKL', document.getElementById('bosSklIn').value || 0], ['Bos_Isi', document.getElementById('bosIsiIn').value || 0], ['Bos_Proses', document.getElementById('bosProsesIn').value || 0], ['Bos_Penilaian', document.getElementById('bosPenilaianIn').value || 0], ['Bos_PTK', document.getElementById('bosPtkIn').value || 0], ['Bos_Sarpras', document.getElementById('bosSarprasIn').value || 0], ['Bos_Pengelolaan', document.getElementById('bosPengelolaanIn').value || 0], ['Bos_Pembiayaan', document.getElementById('bosPembiayaanIn').value || 0]]); });
-        
-        document.getElementById('formConfig').addEventListener('submit', function(e) { 
-            handleConfigSubmit(e, 'btnSubmitConfig', [
-                ['URL_SPMB', document.getElementById('urlSpmbIn').value], 
-                ['URL_Buku_Tamu', document.getElementById('urlBukuTamuIn').value], 
-                ['Alamat_Sekolah', document.getElementById('alamatIn').value], 
-                ['No_WhatsApp', document.getElementById('waIn').value], 
-                ['URL_YouTube', document.getElementById('ytIn').value], 
-                ['URL_TikTok', document.getElementById('tiktokIn').value], 
-                ['URL_Instagram', document.getElementById('instaIn').value], 
-                ['URL_Facebook', document.getElementById('fbIn').value], 
-                ['URL_X', document.getElementById('xIn').value]
-            ]); 
-        });
-
-        function compressImagePromise(file) {
-            return new Promise((resolve) => {
-                if (!file) { resolve(""); return; }
-                const r = new FileReader(); r.readAsDataURL(file);
-                r.onload = e => { const i = new Image(); i.src = e.target.result; i.onload = () => { const c = document.createElement('canvas'); const s = 1000 / i.width; c.width = 1000; c.height = i.height * s; c.getContext('2d').drawImage(i, 0, 0, c.width, c.height); resolve(c.toDataURL('image/jpeg', 0.75).split(',')[1]); }}
-            });
-        }
-        function processAndCompressImage(file, callback) { compressImagePromise(file).then(callback); }
-        
-        function handleBgUpload(input) { 
-            if(!input.files || input.files.length === 0) return; 
-            document.getElementById('bgLoading').classList.remove('d-none'); 
-            
-            let uploadPromises = [];
-            for (let i = 0; i < input.files.length; i++) {
-                uploadPromises.push(new Promise((resolve) => {
-                    processAndCompressImage(input.files[i], (base64) => { 
-                        fetch(GAS_WEB_APP_URL, { method: 'POST', mode: 'cors', body: JSON.stringify({ action: "update_bg", fileData: base64, nama: "Latar Belakang Hero (CMS)" }) })
-                        .then(res => res.json()).then(data => { if(data.status==="error") alert("Error Upload Hero: " + data.message); resolve(); }).catch(()=>resolve()); 
-                    });
-                }));
+        setTimeout(() => {
+            const wrap = document.getElementById('ksSambutanWrapper');
+            const content = document.getElementById('ksSambutan');
+            if (content.scrollHeight > wrap.clientHeight + 10) {
+                document.getElementById('btnSelengkapnya').style.display = 'inline-block';
+                document.getElementById('visiMisiFade').style.display = 'block';
+            } else {
+                document.getElementById('btnSelengkapnya').style.display = 'none';
+                document.getElementById('visiMisiFade').style.display = 'none';
             }
-            Promise.all(uploadPromises).then(() => window.location.reload());
-        }
+        }, 300);
 
-        function handleBosBgUpload(input) { 
-            if(!input.files[0]) return; 
-            document.getElementById('bosBgLoading').classList.remove('d-none'); 
-            processAndCompressImage(input.files[0], (base64) => { 
-                fetch(GAS_WEB_APP_URL, { method: 'POST', mode: 'cors', body: JSON.stringify({ action: "update_bos_bg", fileData: base64 }) })
-                .then(res => res.json()).then(data => {
-                    if(data.status==="error") { alert("Error Upload BOS: " + data.message); document.getElementById('bosBgLoading').classList.add('d-none'); }
-                    else { window.location.reload(); }
-                }); 
-            }); 
-        }
+        // Statistik 3D
+        const colors = ['stat-color-0', 'stat-color-1', 'stat-color-2', 'stat-color-3', 'stat-color-4', 'stat-color-5', 'stat-color-6', 'stat-color-7'];
+        document.getElementById('statContainer').innerHTML = state.statistik.length > 0 ? state.statistik.map((st, index) => `
+            <div class="col-6 col-md-3 col-lg-2">
+                <div class="stat-card ${colors[index % colors.length]}">
+                    <i class="fas ${escapeHtml(st.icon || 'fa-chart-pie')}"></i>
+                    <h3>${escapeHtml(st.nilai)}</h3>
+                    <small>${escapeHtml(st.nama)}</small>
+                </div>
+            </div>
+        `).join('') : '<div class="col-12 text-center text-muted">Belum ada data statistik.</div>';
 
-        function handleLogoUpload(input) { 
-            if(!input.files[0]) return; 
-            document.getElementById('logoLoading').classList.remove('d-none'); 
-            processAndCompressImage(input.files[0], (base64) => { 
-                fetch(GAS_WEB_APP_URL, { method: 'POST', mode: 'cors', body: JSON.stringify({ action: "update_logo", fileData: base64 }) })
-                .then(res => res.json()).then(data => {
-                    if(data.status==="error") { alert("Error Upload Logo: " + data.message); document.getElementById('logoLoading').classList.add('d-none'); }
-                    else { window.location.reload(); }
-                }); 
-            }); 
-        }
-        
-        document.getElementById('formBerita').addEventListener('submit', function(e) {
-            e.preventDefault(); const btn = document.getElementById('btnSubmitBerita'); const files = document.getElementById('beritaFoto').files;
-            if(files.length === 0) return alert("Pilih minimal 1 foto dokumentasi!"); btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Mengunggah...'; btn.disabled = true;
-            let filePromises = []; for(let i = 0; i < files.length; i++) filePromises.push(compressImagePromise(files[i]));
-            Promise.all(filePromises).then(base64Array => { 
-                fetch(GAS_WEB_APP_URL, { method: 'POST', mode: 'cors', body: JSON.stringify({ action: "tambah_berita", judul: document.getElementById('beritaJudul').value, konten: document.getElementById('beritaKonten').value, fileDataArray: base64Array }) })
-                .then(res => res.json()).then(data => { if(data.status==="error") alert("Error: "+data.message); window.location.reload(); }); 
-            });
+        // Dana BOS
+        let totalBos = 0;
+        ['SKL', 'Isi', 'Proses', 'Penilaian', 'PTK', 'Sarpras', 'Pengelolaan', 'Pembiayaan'].forEach(k => {
+            let val = parseInt(s['Bos_' + k]) || 0;
+            totalBos += val;
+            document.getElementById('pub_Bos_' + k).textContent = formatRupiah(val);
         });
-        function hapusBerita(id) { if(confirm("Hapus berita ini permanen?")) fetch(GAS_WEB_APP_URL, { method: 'POST', mode: 'cors', body: JSON.stringify({ action: "hapus_berita", id: id }) }).then(() => window.location.reload()); }
+        document.getElementById('pub_Bos_Total').textContent = formatRupiah(totalBos);
 
-        function generateStatIcon(name) { let n = name.toLowerCase(); if(n.includes('siswa')||n.includes('murid')) return 'fa-users'; if(n.includes('rombel')||n.includes('kelas')) return 'fa-chalkboard-teacher'; if(n.includes('guru')||n.includes('pendidik')) return 'fa-user-tie'; if(n.includes('tendik')||n.includes('tata usaha')) return 'fa-user-cog'; if(n.includes('ruang')||n.includes('gedung')) return 'fa-door-open'; if(n.includes('akreditasi')||n.includes('juara')) return 'fa-award'; if(n.includes('rumah')||n.includes('dinas')) return 'fa-home'; if(n.includes('toilet')||n.includes('wc')) return 'fa-restroom'; if(n.includes('uks')||n.includes('medis')) return 'fa-briefcase-medical'; if(n.includes('perpus')||n.includes('buku')) return 'fa-book-reader'; if(n.includes('lab')||n.includes('komputer')||n.includes('tik')) return 'fa-laptop'; if(n.includes('luas')||n.includes('lahan')||n.includes('tanah')) return 'fa-map-marked-alt'; return 'fa-chart-pie'; }
+        // Aplikasi Layanan 3D
+        const appColors = ['#dc3545', '#198754', '#0d6efd', '#d97706', '#0891b2', '#6f42c1', '#fd7e14', '#20c997', '#e83e8c', '#6610f2'];
+        document.getElementById('appContainer').innerHTML = state.apps.length > 0 ? state.apps.map((app, index) => {
+            const color = appColors[index % appColors.length];
+            return `
+            <div class="slide-item app">
+                <a href="${escapeHtml(app.url)}" target="_blank" class="text-decoration-none text-dark d-block">
+                    <div class="app-icon-wrapper mx-auto mb-2 d-flex align-items-center justify-content-center" style="color: ${color};">
+                        <i class="fas ${escapeHtml(app.icon || 'fa-link')} fa-2x"></i>
+                    </div>
+                    <h6 class="fw-bold small mb-0 px-1 text-wrap" style="line-height: 1.3;">${escapeHtml(app.nama)}</h6>
+                </a>
+                <div class="admin-panel mt-2 text-center">
+                    <button class="btn btn-sm btn-outline-primary mb-1 p-1 px-2" onclick="editAppById('${escapeHtml(app.id)}')"><i class="fas fa-edit"></i></button>
+                    <button class="btn btn-sm btn-outline-danger mb-1 p-1 px-2" onclick="hapusApp('${escapeHtml(app.id)}')"><i class="fas fa-trash"></i></button>
+                </div>
+            </div>`;
+        }).join('') : '<p class="text-muted w-100 text-center mt-2">Belum ada link layanan.</p>';
+        if (state.apps.length > 3) initSlider('appWrapper', 150);
 
-        document.getElementById('appName').addEventListener('input', function() {
-            const name = this.value.toLowerCase();
-            let options = ['fa-link', 'fa-external-link-alt', 'fa-globe', 'fa-paper-plane']; 
-            
-            if(name.includes('rapor') || name.includes('nilai') || name.includes('ujian') || name.includes('cbt') || name.includes('asesmen')) options = ['fa-book-open', 'fa-laptop-code', 'fa-file-alt', 'fa-graduation-cap'];
-            else if(name.includes('absen') || name.includes('hadir') || name.includes('kehadiran')) options = ['fa-user-check', 'fa-calendar-check', 'fa-clipboard-list', 'fa-clock'];
-            else if(name.includes('ppdb') || name.includes('spmb') || name.includes('daftar') || name.includes('mutasi')) options = ['fa-user-plus', 'fa-id-card', 'fa-file-signature', 'fa-school'];
-            else if(name.includes('uang') || name.includes('spp') || name.includes('bayar') || name.includes('bos') || name.includes('keuangan')) options = ['fa-money-bill-wave', 'fa-wallet', 'fa-file-invoice-dollar', 'fa-coins'];
-            else if(name.includes('perpus') || name.includes('buku') || name.includes('baca') || name.includes('literasi')) options = ['fa-book', 'fa-book-reader', 'fa-atlas', 'fa-swatchbook'];
-            else if(name.includes('jadwal') || name.includes('agenda') || name.includes('kalender')) options = ['fa-calendar-alt', 'fa-calendar-days', 'fa-list', 'fa-clock'];
-            else if(name.includes('miskin') || name.includes('beasiswa') || name.includes('bantuan') || name.includes('pip') || name.includes('kip')) options = ['fa-hands-helping', 'fa-hand-holding-heart', 'fa-hand-holding-usd', 'fa-user-graduate'];
-            else if(name.includes('data') || name.includes('dapodik') || name.includes('info') || name.includes('statistik')) options = ['fa-database', 'fa-server', 'fa-folder-open', 'fa-chart-bar'];
-            else if(name.includes('guru') || name.includes('ptk') || name.includes('pegawai') || name.includes('staf') || name.includes('tendik')) options = ['fa-chalkboard-teacher', 'fa-user-tie', 'fa-users-cog', 'fa-id-badge'];
-            else if(name.includes('siswa') || name.includes('murid') || name.includes('anak') || name.includes('peserta')) options = ['fa-users', 'fa-user-graduate', 'fa-child', 'fa-address-book'];
-            else if(name.includes('rumah') || name.includes('gedung') || name.includes('fasilitas') || name.includes('sarpras')) options = ['fa-home', 'fa-house-user', 'fa-building', 'fa-warehouse'];
-            else if(name.includes('surat') || name.includes('tamu') || name.includes('pesan') || name.includes('kontak')) options = ['fa-envelope', 'fa-envelope-open-text', 'fa-address-card', 'fa-comments'];
-            else if(name.includes('foto') || name.includes('video') || name.includes('galeri') || name.includes('media')) options = ['fa-images', 'fa-camera', 'fa-video', 'fa-photo-video'];
-            else if(name.includes('admin') || name.includes('pengaturan') || name.includes('sistem') || name.includes('cpanel')) options = ['fa-cogs', 'fa-tools', 'fa-user-shield', 'fa-sliders-h'];
-            else if(name.includes('kesehatan') || name.includes('uks') || name.includes('medis') || name.includes('dokter')) options = ['fa-briefcase-medical', 'fa-heartbeat', 'fa-hospital', 'fa-plus-square'];
-            else if(name.includes('prestasi') || name.includes('juara') || name.includes('lomba') || name.includes('penghargaan')) options = ['fa-trophy', 'fa-medal', 'fa-award', 'fa-star'];
-            
-            document.getElementById('iconOptionsContainer').innerHTML = options.map((opt, idx) => `<div class="icon-option ${idx === 0 ? 'selected' : ''}" onclick="selectAppIcon(this, '${opt}')"><i class="fas ${opt}"></i></div>`).join('');
-            document.getElementById('selectedAppIcon').value = options[0];
+        // Galeri Kegiatan 3D
+        document.getElementById('galeriContainer').innerHTML = state.galeri.length > 0 ? state.galeri.map(g => `
+            <div class="slide-item galeri">
+                <div class="card-3d h-100 overflow-hidden" style="cursor:pointer;" onclick="showGaleriDetail('${escapeHtml(g.id)}')">
+                    <img src="${g.image_url}" class="card-img-top" style="height: 185px; object-fit: cover;" loading="lazy">
+                    <div class="card-body text-center p-2">
+                        <p class="card-text fw-bold mb-1 small">${escapeHtml(g.judul)}</p>
+                        <button class="btn btn-sm btn-outline-danger admin-panel mt-1 w-100" onclick="event.stopPropagation(); hapusFoto('${escapeHtml(g.id)}')"><i class="fas fa-trash me-1"></i>Hapus</button>
+                    </div>
+                </div>
+            </div>
+        `).join('') : '<p class="text-muted text-center w-100 mt-2">Belum ada foto kegiatan.</p>';
+        if (state.galeri.length > 2) initSlider('galeriWrapper', 300);
+
+        // Buku Tamu List
+        document.getElementById('bukuTamuList').innerHTML = state.bukuTamu.length > 0 ? state.bukuTamu.map(bt => `
+            <tr>
+                <td>${escapeHtml(formatDateID(bt.created_at))}</td>
+                <td><strong>${escapeHtml(bt.nama)}</strong><br><small class="text-muted">${escapeHtml(bt.instansi)}</small></td>
+                <td>${escapeHtml(bt.keperluan)}</td>
+                <td class="admin-panel"><button class="btn btn-sm btn-outline-danger py-0 px-1" onclick="hapusBukuTamu('${escapeHtml(bt.id)}')"><i class="fas fa-times"></i></button></td>
+            </tr>
+        `).join('') : '<tr><td colspan="4" class="text-center text-muted">Belum ada data kunjungan.</td></tr>';
+
+        // Footer & Medsos
+        document.getElementById('footerDeskripsi').textContent = s.Deskripsi_Footer || "Satuan Pendidikan Sekolah Dasar Negeri di bawah naungan Dinas Pendidikan, Pemuda dan Olahraga Kabupaten Donggala, Provinsi Sulawesi Tengah.";
+        document.getElementById('footerAlamat').textContent = s.Alamat_Sekolah || "Kec. Pinembani, Kabupaten Donggala, Sulawesi Tengah";
+        document.getElementById('footerTelepon').textContent = s.Telepon_Sekolah || "-";
+        document.getElementById('footerEmail').textContent = s.Email_Sekolah || "sdn8pinembani@gmail.com";
+
+        [['ytLink', s.URL_YouTube], ['tiktokLink', s.URL_TikTok], ['instaLink', s.URL_Instagram], ['fbLink', s.URL_Facebook], ['xLink', s.URL_X]].forEach(link => {
+            const el = document.getElementById(link[0]);
+            if (el) {
+                if (link[1] && String(link[1]).trim() !== "") { el.href = link[1]; el.classList.remove('d-none'); }
+                else { el.classList.add('d-none'); }
+            }
         });
-        
-        function selectAppIcon(element, iconClass) { document.querySelectorAll('.icon-option').forEach(el => el.classList.remove('selected')); element.classList.add('selected'); document.getElementById('selectedAppIcon').value = iconClass; }
-        
-        function openAddAppModal() {
-            document.getElementById('appId').value = ""; document.getElementById('appName').value = ""; document.getElementById('appUrl').value = "";
-            document.getElementById('appName').dispatchEvent(new Event('input'));
-            document.getElementById('appModalTitle').innerText = "Tambah Menu Aplikasi";
-            new bootstrap.Modal(document.getElementById('appModal')).show();
+
+        if (s.No_WhatsApp && String(s.No_WhatsApp).trim() !== "") {
+            let waNum = String(s.No_WhatsApp).replace(/\D/g, '');
+            if (waNum.startsWith('08')) waNum = '62' + waNum.substring(1);
+            const waUrl = `https://wa.me/${waNum}`;
+            document.getElementById('waFloatBtn').href = waUrl;
+            document.getElementById('footerWaLink').href = waUrl;
         }
 
-        function editApp(id, nama, url, icon) {
-            document.getElementById('appId').value = id; document.getElementById('appName').value = nama; document.getElementById('appUrl').value = url;
-            document.getElementById('appName').dispatchEvent(new Event('input')); 
-            setTimeout(() => {
-                let exists = false; document.querySelectorAll('.icon-option').forEach(el => { if (el.querySelector('i').className === 'fas ' + icon) { selectAppIcon(el, icon); exists = true; } });
-                if(!exists) {
-                    document.getElementById('iconOptionsContainer').innerHTML += `<div class="icon-option selected" onclick="selectAppIcon(this, '${icon}')"><i class="fas ${icon}"></i></div>`;
-                    document.getElementById('selectedAppIcon').value = icon;
-                    document.querySelectorAll('.icon-option').forEach(el => { if(el.querySelector('i').className !== 'fas ' + icon) el.classList.remove('selected'); });
-                }
-            }, 100);
-            document.getElementById('appModalTitle').innerText = "Edit Menu Aplikasi";
-            new bootstrap.Modal(document.getElementById('appModal')).show();
+        if (sessionStorage.getItem('isAdmin') === 'true') populateAdminForms();
+    }
+
+    // ============================================================================
+    // LOGIKA KATALOG 105+ IKON APLIKASI & AUTO-REKOMENDASI
+    // ============================================================================
+    document.getElementById('appName').addEventListener('input', function() {
+        const name = this.value.toLowerCase();
+        if (!name) {
+            autoRecommendedIcons = ['fa-link', 'fa-globe', 'fa-book-open', 'fa-database', 'fa-user-check', 'fa-coins'];
+        } else if (name.includes('rapor') || name.includes('nilai') || name.includes('ujian') || name.includes('asesmen')) {
+            autoRecommendedIcons = ICON_CATALOG.akademik;
+        } else if (name.includes('dapodik') || name.includes('data') || name.includes('arkas') || name.includes('sistem')) {
+            autoRecommendedIcons = ICON_CATALOG.data;
+        } else if (name.includes('bos') || name.includes('uang') || name.includes('pip') || name.includes('kip') || name.includes('spp')) {
+            autoRecommendedIcons = ICON_CATALOG.keuangan;
+        } else if (name.includes('guru') || name.includes('siswa') || name.includes('absen') || name.includes('gtk') || name.includes('ptk')) {
+            autoRecommendedIcons = ICON_CATALOG.warga;
+        } else if (name.includes('uks') || name.includes('gedung') || name.includes('sarpras') || name.includes('perpus')) {
+            autoRecommendedIcons = ICON_CATALOG.sarpras;
+        } else if (name.includes('surat') || name.includes('jadwal') || name.includes('arsip') || name.includes('tamu')) {
+            autoRecommendedIcons = ICON_CATALOG.dokumen;
+        } else {
+            autoRecommendedIcons = ICON_CATALOG.media;
         }
 
-        function saveApp() { 
-            const id = document.getElementById('appId').value, nama = document.getElementById('appName').value, url = document.getElementById('appUrl').value, icon = document.getElementById('selectedAppIcon').value;
-            if(!nama || !url) return alert("Harap isi semua kolom!"); 
-            document.getElementById('btnSaveApp').innerHTML = "Menyimpan..."; document.getElementById('btnSaveApp').disabled = true; 
-            const payload = { action: id ? "edit_app" : "tambah_app", nama: nama, url: url, icon: icon }; if (id) payload.id = id;
-            fetch(GAS_WEB_APP_URL, { method: 'POST', mode: 'cors', body: JSON.stringify(payload) }).then(() => window.location.reload()); 
+        selectAppIconByName(autoRecommendedIcons[0]);
+        renderIconCatalog();
+    });
+
+    window.renderIconCatalog = () => {
+        const cat = document.getElementById('iconCategoryFilter').value;
+        const query = document.getElementById('iconSearchInput').value.toLowerCase().trim();
+        const currentSelected = document.getElementById('selectedAppIcon').value;
+
+        let list = [];
+        if (cat === 'all') {
+            list = [...new Set(Object.values(ICON_CATALOG).flat())];
+        } else if (cat === 'rekomendasi') {
+            list = autoRecommendedIcons;
+        } else {
+            list = ICON_CATALOG[cat] || [];
         }
 
-        function hapusApp(id) { if(confirm("Yakin ingin menghapus aplikasi ini?")) { fetch(GAS_WEB_APP_URL, { method: 'POST', mode: 'cors', body: JSON.stringify({ action: "hapus_app", id: id }) }).then(() => window.location.reload()); } }
-
-        function saveFoto() { 
-            const judul = document.getElementById('fotoJudul').value, file = document.getElementById('fotoFile').files[0]; 
-            if(!file || !judul) return; 
-            processAndCompressImage(file, (base64) => { 
-                fetch(GAS_WEB_APP_URL, { method: 'POST', mode: 'cors', body: JSON.stringify({ action: "upload_galeri", nama: judul, fileData: base64 }) })
-                .then(res => res.json()).then(data => { if(data.status==="error") alert("Error: "+data.message); window.location.reload(); }); 
-            }); 
-        }
-        function hapusFoto(id) { if(confirm("Hapus foto ini?")) fetch(GAS_WEB_APP_URL, { method: 'POST', mode: 'cors', body: JSON.stringify({ action: "hapus_galeri", id: id }) }).then(() => window.location.reload()); }
-
-        function hapusHeroBg(id) { 
-            if(confirm("Yakin ingin menghapus gambar latar ini?")) {
-                fetch(GAS_WEB_APP_URL, { method: 'POST', mode: 'cors', body: JSON.stringify({ action: "hapus_hero", id: id }) })
-                .then(() => window.location.reload()); 
-            } 
+        if (query) {
+            list = list.filter(ic => ic.toLowerCase().includes(query));
         }
 
-        document.querySelectorAll('.bottom-nav a').forEach(link => { link.addEventListener('click', function() { if(!this.classList.contains('login-btn') && !this.classList.contains('admin-panel') && !this.hasAttribute('target')) { document.querySelectorAll('.bottom-nav a').forEach(nav => nav.classList.remove('active')); this.classList.add('active'); } }); });
-    </script>
+        if (currentSelected && !list.includes(currentSelected) && !query) {
+            list.unshift(currentSelected);
+        }
+
+        const container = document.getElementById('iconOptionsContainer');
+        container.innerHTML = list.map(ic => `
+            <div class="icon-option ${ic === currentSelected ? 'selected' : ''}" onclick="selectAppIconByName('${ic}')" title="${ic}">
+                <i class="fas ${ic}"></i>
+            </div>
+        `).join('');
+    };
+
+    window.selectAppIconByName = (iconClass) => {
+        document.getElementById('selectedAppIcon').value = iconClass;
+        document.getElementById('selectedIconPreview').innerHTML = `<i class="fas ${escapeHtml(iconClass)} me-2"></i>${escapeHtml(iconClass)}`;
+        document.querySelectorAll('#iconOptionsContainer .icon-option').forEach(el => {
+            const iEl = el.querySelector('i');
+            if (iEl && iEl.classList.contains(iconClass)) el.classList.add('selected');
+            else el.classList.remove('selected');
+        });
+    };
+
+    // ============================================================================
+    // AUTENTIKASI HYBRID & CRUD SUPABASE
+    // ============================================================================
+    function toggleAdminUI(status) {
+        sessionStorage.setItem('isAdmin', status ? 'true' : 'false');
+        document.getElementById('app-3d-shell').classList.toggle('is-admin', status);
+        const loginGembok = document.getElementById('loginGembok');
+        if (status) {
+            loginGembok.innerHTML = '<i class="fas fa-edit text-danger fs-5"></i>';
+            loginGembok.setAttribute('data-bs-target', '#cmsSettingsModal');
+        } else {
+            loginGembok.innerHTML = '@';
+            loginGembok.setAttribute('data-bs-target', '#loginModal');
+        }
+    }
+
+    window.quickLoginPreview = (role) => {
+        if (!IS_PREVIEW) return;
+        toggleAdminUI(true);
+        renderWebsiteData();
+        showToast(`Login ${role.toUpperCase()} Aktif (Mode Preview)!`);
+    };
+
+    window.loginAdminAuth = async () => {
+        const email = document.getElementById('adminEmail').value.trim();
+        const password = document.getElementById('adminPass').value;
+        try {
+            if (!IS_PREVIEW) {
+                const { error } = await supabase.auth.signInWithPassword({ email, password });
+                if (error) throw error;
+            }
+            toggleAdminUI(true);
+            bootstrap.Modal.getInstance(document.getElementById('loginModal')).hide();
+            showToast("Login Super Admin Berhasil!");
+            renderWebsiteData();
+        } catch (err) {
+            alert("Gagal Login Admin: " + err.message);
+        }
+    };
+
+    window.loginOperator = async () => {
+        const user = document.getElementById('opUser').value.trim();
+        const pass = document.getElementById('opPass').value.trim();
+        try {
+            if (IS_PREVIEW) {
+                const found = state.operators.find(o => o.username === user && o.password === pass);
+                if (!found) throw new Error("Username atau Password salah!");
+            } else {
+                const { data, error } = await supabase.from('operators').select('*').eq('username', user).eq('password', pass).maybeSingle();
+                if (error || !data) throw new Error("Username atau Password Operator salah!");
+            }
+            toggleAdminUI(true);
+            bootstrap.Modal.getInstance(document.getElementById('loginModal')).hide();
+            showToast("Login Operator Berhasil!");
+            renderWebsiteData();
+        } catch (err) {
+            alert(err.message);
+        }
+    };
+
+    window.logoutApp = async () => {
+        if (!IS_PREVIEW && supabase) await supabase.auth.signOut();
+        sessionStorage.removeItem('isAdmin');
+        toggleAdminUI(false);
+        showToast("Anda telah keluar dari sesi Admin.");
+    };
+
+    window.openBukuTamuAction = (e) => {
+        e.preventDefault();
+        new bootstrap.Modal(document.getElementById('bukuTamuModal')).show();
+    };
+
+    function populateAdminForms() {
+        const s = state.settings || {};
+        document.getElementById('heroJudulIn').value = s.Judul_Hero || "SDN 27 BANAWA SELATAN";
+        document.getElementById('heroSubjudulIn').value = s.Subjudul_Hero || "";
+        document.getElementById('ksNamaIn').value = s.Nama_Kepala_Sekolah || "";
+        document.getElementById('ksVideoIn').value = s.URL_Video_KS || "";
+        document.getElementById('ksSambutanIn').value = s.Sambutan_Kepala_Sekolah || "";
+
+        document.getElementById('urlSpmbIn').value = s.URL_SPMB || "";
+        document.getElementById('urlBukuTamuIn').value = s.URL_Buku_Tamu || "";
+        document.getElementById('deskripsiFooterIn').value = s.Deskripsi_Footer || "";
+        document.getElementById('alamatIn').value = s.Alamat_Sekolah || "";
+        document.getElementById('waIn').value = s.No_WhatsApp || "";
+        document.getElementById('teleponIn').value = s.Telepon_Sekolah || "";
+        document.getElementById('emailIn').value = s.Email_Sekolah || "";
+        document.getElementById('ytIn').value = s.URL_YouTube || "";
+        document.getElementById('tiktokIn').value = s.URL_TikTok || "";
+        document.getElementById('instaIn').value = s.URL_Instagram || "";
+        document.getElementById('fbIn').value = s.URL_Facebook || "";
+        document.getElementById('xIn').value = s.URL_X || "";
+
+        ['Skl', 'Isi', 'Proses', 'Penilaian', 'Ptk', 'Sarpras', 'Pengelolaan', 'Pembiayaan'].forEach(k => {
+            const keyName = 'Bos_' + (k === 'Ptk' ? 'PTK' : k === 'Skl' ? 'SKL' : k);
+            document.getElementById('bos' + k + 'In').value = s[keyName] || 0;
+        });
+        document.getElementById('bosSklIn').dispatchEvent(new Event('input'));
+
+        document.getElementById('adminStatContainer').innerHTML = state.statistik.map(st => `
+            <div class="col-md-6 mb-2">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text w-50 fw-semibold text-truncate"><i class="fas ${escapeHtml(st.icon)} me-2 text-danger"></i>${escapeHtml(st.nama)}</span>
+                    <input type="text" class="form-control stat-val-input fw-bold" data-id="${escapeHtml(st.id)}" value="${escapeHtml(st.nilai)}">
+                    <button class="btn btn-outline-danger" type="button" onclick="hapusStatistik('${escapeHtml(st.id)}')"><i class="fas fa-trash"></i></button>
+                </div>
+            </div>
+        `).join('');
+
+        document.getElementById('adminHeroList').innerHTML = state.heroBgs.map(bg => `
+            <div class="col-4 col-md-3">
+                <div class="position-relative shadow-sm rounded overflow-hidden border">
+                    <img src="${bg.image_url}" class="w-100" style="height: 65px; object-fit: cover;">
+                    <button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0 m-1 py-0 px-1" onclick="hapusHeroBg('${escapeHtml(bg.id)}')"><i class="fas fa-times"></i></button>
+                </div>
+            </div>
+        `).join('');
+
+        document.getElementById('operatorListBody').innerHTML = state.operators.map(op => `
+            <tr>
+                <td>${escapeHtml(op.nama_lengkap)}</td>
+                <td><code>${escapeHtml(op.username)}</code></td>
+                <td><button class="btn btn-sm btn-outline-danger py-0" onclick="hapusOperator('${escapeHtml(op.id)}')"><i class="fas fa-trash"></i></button></td>
+            </tr>
+        `).join('');
+    }
+
+    async function upsertSettingsBatch(pairs) {
+        if (IS_PREVIEW) {
+            pairs.forEach(([k, v]) => state.settings[k] = String(v));
+            savePreview();
+            renderWebsiteData();
+            showToast("Pengaturan berhasil disimpan!");
+            return;
+        }
+        const rows = pairs.map(([key, value]) => ({ key, value: String(value), updated_at: new Date().toISOString() }));
+        const { error } = await supabase.from('site_settings').upsert(rows, { onConflict: 'key' });
+        if (error) return showToast("Gagal menyimpan: " + error.message, true);
+        showToast("Pengaturan berhasil disimpan!");
+        await loadWebsiteData();
+    }
+
+    document.getElementById('formKSConfig').addEventListener('submit', e => {
+        e.preventDefault();
+        upsertSettingsBatch([
+            ['Judul_Hero', document.getElementById('heroJudulIn').value],
+            ['Subjudul_Hero', document.getElementById('heroSubjudulIn').value],
+            ['Nama_Kepala_Sekolah', document.getElementById('ksNamaIn').value],
+            ['URL_Video_KS', document.getElementById('ksVideoIn').value],
+            ['Sambutan_Kepala_Sekolah', document.getElementById('ksSambutanIn').value]
+        ]);
+    });
+
+    document.getElementById('formBosConfig').addEventListener('submit', e => {
+        e.preventDefault();
+        upsertSettingsBatch([
+            ['Bos_SKL', document.getElementById('bosSklIn').value || 0],
+            ['Bos_Isi', document.getElementById('bosIsiIn').value || 0],
+            ['Bos_Proses', document.getElementById('bosProsesIn').value || 0],
+            ['Bos_Penilaian', document.getElementById('bosPenilaianIn').value || 0],
+            ['Bos_PTK', document.getElementById('bosPtkIn').value || 0],
+            ['Bos_Sarpras', document.getElementById('bosSarprasIn').value || 0],
+            ['Bos_Pengelolaan', document.getElementById('bosPengelolaanIn').value || 0],
+            ['Bos_Pembiayaan', document.getElementById('bosPembiayaanIn').value || 0]
+        ]);
+    });
+
+    document.getElementById('formConfig').addEventListener('submit', e => {
+        e.preventDefault();
+        upsertSettingsBatch([
+            ['URL_SPMB', document.getElementById('urlSpmbIn').value],
+            ['URL_Buku_Tamu', document.getElementById('urlBukuTamuIn').value],
+            ['Deskripsi_Footer', document.getElementById('deskripsiFooterIn').value],
+            ['Alamat_Sekolah', document.getElementById('alamatIn').value],
+            ['No_WhatsApp', document.getElementById('waIn').value],
+            ['Telepon_Sekolah', document.getElementById('teleponIn').value],
+            ['Email_Sekolah', document.getElementById('emailIn').value],
+            ['URL_YouTube', document.getElementById('ytIn').value],
+            ['URL_TikTok', document.getElementById('tiktokIn').value],
+            ['URL_Instagram', document.getElementById('instaIn').value],
+            ['URL_Facebook', document.getElementById('fbIn').value],
+            ['URL_X', document.getElementById('xIn').value]
+        ]);
+    });
+
+    function compressImageDataUrl(file, maxW = 960) {
+        return new Promise(resolve => {
+            if (!file) return resolve("");
+            const r = new FileReader();
+            r.readAsDataURL(file);
+            r.onload = e => {
+                const img = new Image();
+                img.src = e.target.result;
+                img.onload = () => {
+                    const c = document.createElement('canvas');
+                    const s = img.width > maxW ? maxW / img.width : 1;
+                    c.width = img.width * s;
+                    c.height = img.height * s;
+                    c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+                    resolve(c.toDataURL('image/jpeg', 0.72));
+                };
+            };
+        });
+    }
+
+    window.handleLogoUpload = async (input) => {
+        if (!input.files[0]) return;
+        const dataUrl = await compressImageDataUrl(input.files[0], 400);
+        await upsertSettingsBatch([['Logo_Sekolah', dataUrl]]);
+    };
+
+    window.handleBosBgUpload = async (input) => {
+        if (!input.files[0]) return;
+        const dataUrl = await compressImageDataUrl(input.files[0], 1200);
+        await upsertSettingsBatch([['BG_Dana_BOS', dataUrl]]);
+    };
+
+    window.handleBgUpload = async (input) => {
+        if (!input.files || input.files.length === 0) return;
+        document.getElementById('bgLoading').classList.remove('d-none');
+        for (const f of input.files) {
+            const dataUrl = await compressImageDataUrl(f, 1280);
+            if (IS_PREVIEW) state.heroBgs.push({ id: 'hb-' + Date.now(), nama: 'Hero BG', image_url: dataUrl });
+            else await supabase.from('hero_slides').insert({ nama: 'Hero BG', image_url: dataUrl });
+        }
+        document.getElementById('bgLoading').classList.add('d-none');
+        savePreview();
+        showToast("Background Hero ditambahkan!");
+        await loadWebsiteData();
+    };
+
+    window.hapusHeroBg = async (id) => {
+        if (!confirm("Hapus gambar latar ini?")) return;
+        if (IS_PREVIEW) state.heroBgs = state.heroBgs.filter(h => String(h.id) !== String(id));
+        else await supabase.from('hero_slides').delete().eq('id', id);
+        savePreview();
+        await loadWebsiteData();
+    };
+
+    document.getElementById('formBerita').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const editId = document.getElementById('beritaIdEdit').value;
+        const judul = document.getElementById('beritaJudul').value;
+        const konten = document.getElementById('beritaKonten').value;
+        const files = document.getElementById('beritaFoto').files;
+
+        const imgs = [];
+        for (const f of files) imgs.push(await compressImageDataUrl(f, 1000));
+
+        if (IS_PREVIEW) {
+            if (editId) {
+                const item = state.berita.find(b => String(b.id) === String(editId));
+                if (item) { item.judul = judul; item.konten = konten; if (imgs.length > 0) item.images = imgs; }
+            } else {
+                state.berita.unshift({ id: 'brt-' + Date.now(), tanggal: new Date().toISOString().split('T')[0], judul, konten, images: imgs });
+            }
+            savePreview();
+        } else {
+            if (editId) {
+                const p = { judul, konten };
+                if (imgs.length > 0) p.images = imgs;
+                await supabase.from('berita').update(p).eq('id', editId);
+            } else {
+                await supabase.from('berita').insert({ tanggal: new Date().toISOString().split('T')[0], judul, konten, images: imgs });
+            }
+        }
+        resetFormBerita();
+        bootstrap.Modal.getInstance(document.getElementById('cmsSettingsModal')).hide();
+        showToast("Berita berhasil disimpan!");
+        await loadWebsiteData();
+    });
+
+    window.hapusBerita = async (id) => {
+        if (!confirm("Hapus berita ini permanen?")) return;
+        if (IS_PREVIEW) state.berita = state.berita.filter(b => String(b.id) !== String(id));
+        else await supabase.from('berita').delete().eq('id', id);
+        savePreview();
+        showToast("Berita dihapus!");
+        await loadWebsiteData();
+    };
+
+    document.getElementById('formUpdateStat').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const inputs = document.querySelectorAll('.stat-val-input');
+        for (const inp of inputs) {
+            const id = inp.getAttribute('data-id');
+            const nilai = inp.value;
+            if (IS_PREVIEW) {
+                const st = state.statistik.find(s => String(s.id) === String(id));
+                if (st) st.nilai = nilai;
+            } else {
+                await supabase.from('statistik').update({ nilai }).eq('id', id);
+            }
+        }
+        savePreview();
+        showToast("Statistik diperbarui!");
+        await loadWebsiteData();
+    });
+
+    document.getElementById('formTambahStat').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const nama = document.getElementById('newStatNama').value;
+        const nilai = document.getElementById('newStatNilai').value;
+        const icon = generateStatIcon(nama);
+        if (IS_PREVIEW) state.statistik.push({ id: 'st-' + Date.now(), nama, nilai, icon });
+        else await supabase.from('statistik').insert({ nama, nilai, icon, urutan: state.statistik.length + 1 });
+        document.getElementById('formTambahStat').reset();
+        savePreview();
+        showToast("Kartu statistik ditambahkan!");
+        await loadWebsiteData();
+    });
+
+    window.hapusStatistik = async (id) => {
+        if (!confirm("Hapus kartu statistik ini?")) return;
+        if (IS_PREVIEW) state.statistik = state.statistik.filter(s => String(s.id) !== String(id));
+        else await supabase.from('statistik').delete().eq('id', id);
+        savePreview();
+        await loadWebsiteData();
+    };
+
+    window.openAddAppModal = () => {
+        document.getElementById('appId').value = "";
+        document.getElementById('appName').value = "";
+        document.getElementById('appUrl').value = "";
+        document.getElementById('iconCategoryFilter').value = "all";
+        document.getElementById('iconSearchInput').value = "";
+        selectAppIconByName('fa-link');
+        renderIconCatalog();
+        document.getElementById('appModalTitle').innerHTML = '<i class="fas fa-plus-circle me-2"></i>Tambah Menu Aplikasi';
+        new bootstrap.Modal(document.getElementById('appModal')).show();
+    };
+
+    window.editAppById = (id) => {
+        const app = state.apps.find(a => String(a.id) === String(id));
+        if (!app) return;
+        document.getElementById('appId').value = app.id;
+        document.getElementById('appName').value = app.nama;
+        document.getElementById('appUrl').value = app.url;
+        document.getElementById('iconCategoryFilter').value = "all";
+        document.getElementById('iconSearchInput').value = "";
+        selectAppIconByName(app.icon || 'fa-link');
+        renderIconCatalog();
+        document.getElementById('appModalTitle').innerHTML = '<i class="fas fa-edit me-2"></i>Edit Menu Aplikasi';
+        new bootstrap.Modal(document.getElementById('appModal')).show();
+    };
+
+    window.saveApp = async () => {
+        const id = document.getElementById('appId').value;
+        const nama = document.getElementById('appName').value;
+        const url = document.getElementById('appUrl').value;
+        const icon = document.getElementById('selectedAppIcon').value;
+        if (!nama || !url) return alert("Harap isi nama dan URL aplikasi!");
+
+        if (IS_PREVIEW) {
+            if (id) {
+                const item = state.apps.find(a => String(a.id) === String(id));
+                if (item) Object.assign(item, { nama, url, icon });
+            } else {
+                state.apps.push({ id: 'ap-' + Date.now(), nama, url, icon });
+            }
+            savePreview();
+        } else {
+            if (id) await supabase.from('aplikasi').update({ nama, url, icon }).eq('id', id);
+            else await supabase.from('aplikasi').insert({ nama, url, icon, urutan: state.apps.length + 1 });
+        }
+        bootstrap.Modal.getInstance(document.getElementById('appModal')).hide();
+        showToast("Aplikasi berhasil disimpan!");
+        await loadWebsiteData();
+    };
+
+    window.hapusApp = async (id) => {
+        if (!confirm("Yakin ingin menghapus aplikasi ini?")) return;
+        if (IS_PREVIEW) state.apps = state.apps.filter(a => String(a.id) !== String(id));
+        else await supabase.from('aplikasi').delete().eq('id', id);
+        savePreview();
+        await loadWebsiteData();
+    };
+
+    window.saveFoto = async () => {
+        const judul = document.getElementById('fotoJudul').value;
+        const file = document.getElementById('fotoFile').files[0];
+        if (!file || !judul) return alert("Harap isi judul dan pilih foto!");
+        const image_url = await compressImageDataUrl(file, 1000);
+        if (IS_PREVIEW) state.galeri.unshift({ id: 'gl-' + Date.now(), judul, image_url });
+        else await supabase.from('galeri').insert({ judul, image_url });
+        document.getElementById('fotoJudul').value = "";
+        document.getElementById('fotoFile').value = "";
+        bootstrap.Modal.getInstance(document.getElementById('galeriModal')).hide();
+        savePreview();
+        showToast("Foto berhasil diunggah!");
+        await loadWebsiteData();
+    };
+
+    window.hapusFoto = async (id) => {
+        if (!confirm("Hapus foto kegiatan ini?")) return;
+        if (IS_PREVIEW) state.galeri = state.galeri.filter(g => String(g.id) !== String(id));
+        else await supabase.from('galeri').delete().eq('id', id);
+        savePreview();
+        await loadWebsiteData();
+    };
+
+    document.getElementById('formBukuTamu').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const nama = document.getElementById('btNama').value;
+        const instansi = document.getElementById('btInstansi').value;
+        const no_hp = document.getElementById('btHp').value;
+        const keperluan = document.getElementById('btKeperluan').value;
+        if (IS_PREVIEW) state.bukuTamu.unshift({ id: 'bt-' + Date.now(), nama, instansi, no_hp, keperluan, created_at: new Date().toISOString() });
+        else await supabase.from('buku_tamu').insert({ nama, instansi, no_hp, keperluan });
+        document.getElementById('formBukuTamu').reset();
+        savePreview();
+        showToast("Buku tamu berhasil disimpan!");
+        await loadWebsiteData();
+    });
+
+    window.hapusBukuTamu = async (id) => {
+        if (!confirm("Hapus data tamu ini?")) return;
+        if (IS_PREVIEW) state.bukuTamu = state.bukuTamu.filter(b => String(b.id) !== String(id));
+        else await supabase.from('buku_tamu').delete().eq('id', id);
+        savePreview();
+        await loadWebsiteData();
+    };
+
+    document.getElementById('formAddOperator').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const nama_lengkap = document.getElementById('newOpNama').value.trim();
+        const username = document.getElementById('newOpUser').value.trim();
+        const password = document.getElementById('newOpPass').value.trim();
+        if (IS_PREVIEW) state.operators.push({ id: 'op-' + Date.now(), nama_lengkap, username, password });
+        else await supabase.from('operators').insert({ nama_lengkap, username, password });
+        document.getElementById('formAddOperator').reset();
+        savePreview();
+        showToast("Operator ditambahkan!");
+        await loadWebsiteData();
+    });
+
+    window.hapusOperator = async (id) => {
+        if (!confirm("Hapus akun operator ini?")) return;
+        if (IS_PREVIEW) state.operators = state.operators.filter(o => String(o.id) !== String(id));
+        else await supabase.from('operators').delete().eq('id', id);
+        savePreview();
+        await loadWebsiteData();
+    };
+
+    // UI Helpers
+    window.openSettingsModal = () => {
+        populateAdminForms();
+        bootstrap.Modal.getOrCreateInstance(document.getElementById('cmsSettingsModal')).show();
+    };
+
+    window.openAddBeritaModal = () => {
+        resetFormBerita();
+        openSettingsModal();
+        bootstrap.Tab.getOrCreateInstance(document.querySelector('#cmsTab button[data-bs-target="#tab-berita"]')).show();
+    };
+
+    window.openEditBeritaModal = (id) => {
+        const b = state.berita.find(item => String(item.id) === String(id));
+        if (!b) return;
+        document.getElementById('beritaIdEdit').value = b.id;
+        document.getElementById('beritaJudul').value = b.judul;
+        document.getElementById('beritaKonten').value = b.konten;
+        document.getElementById('beritaFoto').required = false;
+        document.getElementById('editBeritaFotoHint').classList.remove('d-none');
+        document.getElementById('btnCancelEditBerita').classList.remove('d-none');
+        document.getElementById('formBeritaHeader').textContent = "Edit Berita: " + b.judul;
+        openSettingsModal();
+        bootstrap.Tab.getOrCreateInstance(document.querySelector('#cmsTab button[data-bs-target="#tab-berita"]')).show();
+    };
+
+    window.resetFormBerita = () => {
+        document.getElementById('formBerita').reset();
+        document.getElementById('beritaIdEdit').value = "";
+        document.getElementById('beritaFoto').required = true;
+        document.getElementById('editBeritaFotoHint').classList.add('d-none');
+        document.getElementById('btnCancelEditBerita').classList.add('d-none');
+        document.getElementById('formBeritaHeader').textContent = "Publikasikan Berita Baru";
+    };
+
+    window.showBeritaDetail = (id) => {
+        const b = state.berita.find(item => String(item.id) === String(id));
+        if (!b) return;
+        document.getElementById('detailBeritaJudul').textContent = b.judul;
+        document.getElementById('detailBeritaTanggal').textContent = formatDateID(b.tanggal || b.created_at);
+        document.getElementById('detailBeritaKonten').textContent = b.konten;
+        const urls = Array.isArray(b.images) ? b.images : [];
+        const carousel = document.getElementById('beritaCarousel');
+        if (urls.length > 0) {
+            document.getElementById('detailBeritaSlider').innerHTML = urls.map((url, idx) => `<div class="carousel-item ${idx === 0 ? 'active' : ''}"><img src="${url}" class="d-block w-100" style="max-height: 420px; object-fit: cover;"></div>`).join('');
+            carousel.style.display = 'block';
+        } else {
+            carousel.style.display = 'none';
+        }
+        new bootstrap.Modal(document.getElementById('beritaDetailModal')).show();
+    };
+
+    window.showGaleriDetail = (id) => {
+        const g = state.galeri.find(item => String(item.id) === String(id));
+        if (!g) return;
+        document.getElementById('detailGaleriJudul').textContent = g.judul;
+        document.getElementById('detailGaleriImg').src = g.image_url;
+        new bootstrap.Modal(document.getElementById('galeriDetailModal')).show();
+    };
+
+    window.toggleVisiMisi = () => {
+        const wrapper = document.getElementById('ksSambutanWrapper');
+        const btn = document.getElementById('btnSelengkapnya');
+        const fade = document.getElementById('visiMisiFade');
+        wrapper.classList.toggle('expanded');
+        if (wrapper.classList.contains('expanded')) {
+            btn.innerHTML = 'Tutup <i class="fas fa-chevron-up ms-1"></i>';
+            fade.classList.add('hidden');
+        } else {
+            btn.innerHTML = 'Selengkapnya <i class="fas fa-chevron-down ms-1"></i>';
+            fade.classList.remove('hidden');
+        }
+    };
+
+    document.querySelectorAll('.bos-input').forEach(input => {
+        input.addEventListener('input', () => {
+            let total = 0;
+            document.querySelectorAll('.bos-input').forEach(inp => total += (parseInt(inp.value) || 0));
+            document.getElementById('bosTotalPreview').textContent = formatRupiah(total);
+        });
+    });
+
+    function generateStatIcon(name) {
+        let n = name.toLowerCase();
+        if (n.includes('siswa') || n.includes('murid')) return 'fa-users';
+        if (n.includes('rombel') || n.includes('kelas')) return 'fa-chalkboard-teacher';
+        if (n.includes('guru') || n.includes('pendidik')) return 'fa-user-tie';
+        if (n.includes('tendik') || n.includes('tata usaha')) return 'fa-user-cog';
+        if (n.includes('ruang') || n.includes('gedung')) return 'fa-door-open';
+        if (n.includes('akreditasi') || n.includes('juara')) return 'fa-award';
+        return 'fa-chart-pie';
+    }
+
+    function initSlider(wrapperId, scrollStep) {
+        const wrapper = document.getElementById(wrapperId);
+        if (!wrapper) return;
+        const slider = wrapper.querySelector('.custom-slider');
+        wrapper.querySelector('.next').onclick = () => slider.scrollBy({ left: scrollStep, behavior: 'smooth' });
+        wrapper.querySelector('.prev').onclick = () => slider.scrollBy({ left: -scrollStep, behavior: 'smooth' });
+        if (sliderIntervals[wrapperId]) clearInterval(sliderIntervals[wrapperId]);
+        sliderIntervals[wrapperId] = setInterval(() => {
+            if (slider.scrollLeft + slider.clientWidth >= slider.scrollWidth - 10) slider.scrollTo({ left: 0, behavior: 'smooth' });
+            else slider.scrollBy({ left: scrollStep, behavior: 'smooth' });
+        }, 3800);
+    }
+
+    function getYouTubeEmbedUrl(url) {
+        if (!url) return "";
+        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=|shorts\/)([^#&?]*).*/;
+        const match = String(url).match(regExp);
+        return (match && match[2].length === 11) ? `https://www.youtube-nocookie.com/embed/${match[2]}?rel=0&modestbranding=1` : "";
+    }
+
+    function showToast(msg, isError = false) {
+        const toastEl = document.getElementById('appToast');
+        toastEl.className = `toast align-items-center text-white border-0 shadow-lg rounded-4 ${isError ? 'bg-danger' : 'bg-success'}`;
+        document.getElementById('appToastMsg').textContent = msg;
+        new bootstrap.Toast(toastEl, { delay: 3000 }).show();
+    }
+
+    function escapeHtml(str) {
+        if (str === null || str === undefined) return "";
+        return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    }
+
+    function formatRupiah(angka) {
+        return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(angka || 0);
+    }
+
+    function formatDateID(dateString) {
+        if (!dateString) return "-";
+        const d = new Date(dateString);
+        return isNaN(d) ? dateString : d.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+    }
+
+    document.querySelectorAll('.bottom-nav a').forEach(link => {
+        link.addEventListener('click', function() {
+            if (!this.classList.contains('admin-panel') && !this.hasAttribute('target')) {
+                document.querySelectorAll('.bottom-nav a').forEach(nav => nav.classList.remove('active'));
+                this.classList.add('active');
+            }
+        });
+    });
+</script>
 </body>
 </html>
